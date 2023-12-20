@@ -3,7 +3,7 @@ use geonames_rs::{
 };
 use std::collections::HashMap;
 
-const USERNAME: &str = "";
+const USERNAME: &str = env!("API_USER");
 
 #[test]
 fn call_api_country_code() {
