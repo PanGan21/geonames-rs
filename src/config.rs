@@ -200,6 +200,13 @@ lazy_static::lazy_static! {
         map.insert("date", vec![]);
         map
     };
+    pub static ref CHILDREN_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("geonameId", vec![]);
+        map.insert("maxRows", vec![]);
+        map.insert("hierarchy", vec!["tourism", "geography", "dependency"]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";

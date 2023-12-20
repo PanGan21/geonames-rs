@@ -1,6 +1,6 @@
 use geonames_rs::{
-    ApiClient, ApiEndpoint, AstergdemResponse, CountryCodeResponse, GeoNamesApi, PostalCode,
-    PostalCodeSearchResponse,
+    AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CountryCodeResponse,
+    GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -22,6 +22,45 @@ fn call_api_astergdem() {
         lng: 10.02,
         lat: 47.03,
         astergdem: 1968,
+    };
+
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_children() {
+    let client = ApiClient::new(GeoNamesApi::Children, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "3175395");
+    params.insert("maxRows", "1");
+
+    let result: ChildrenResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = ChildrenResponse {
+        total_results_count: 20,
+        geonames: vec![Geoname {
+            admin_code_1: "16".to_string(),
+            lng: "11".to_string(),
+            geoname_id: 3165361,
+            toponym_name: "Toscana".to_string(),
+            country_id: "3175395".to_string(),
+            admin_codes1: AdminCodes1 {
+                iso3166_2: "52".to_string(),
+            },
+            country_name: "Italy".to_string(),
+            fcode_name: "first-order administrative division".to_string(),
+            admin_name1: "Tuscany".to_string(),
+            lat: "43.41667".to_string(),
+            fcode: "ADM1".to_string(),
+            fcl: "A".to_string(),
+            population: 3729641,
+            country_code: "IT".to_string(),
+            name: "Tuscany".to_string(),
+            fcl_name: "country, state, region,...".to_string(),
+        }],
     };
 
     assert_eq!(result, expected_result);

@@ -13,7 +13,7 @@ use crate::{
         POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS, SRTM3_PARAMS, TIMEZONE_PARAMS,
     },
     response::ApiResponse,
-    ApiError,
+    ApiError, CHILDREN_PARAMS,
 };
 
 #[async_trait]
@@ -130,7 +130,7 @@ impl ApiEndpoint for ApiClient {
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>> {
         match self.api {
             GeoNamesApi::Astergdem => Some(&ASTERGDEM_PARAMS),
-            GeoNamesApi::Children => None,
+            GeoNamesApi::Children => Some(&CHILDREN_PARAMS),
             GeoNamesApi::Cities => None,
             GeoNamesApi::Contains => None,
             GeoNamesApi::CountryCode => Some(&COUNTRY_CODE_PARAMS),

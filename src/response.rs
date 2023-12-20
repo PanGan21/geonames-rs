@@ -48,3 +48,37 @@ pub struct AstergdemResponse {
     pub lat: f64,
     pub astergdem: i32,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct ChildrenResponse {
+    pub total_results_count: i32,
+    pub geonames: Vec<Geoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Geoname {
+    pub admin_code_1: String,
+    pub lng: String,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub country_id: String,
+    pub admin_codes1: AdminCodes1,
+    pub country_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+    pub lat: String,
+    pub fcode: String,
+    pub fcl: String,
+    pub population: i32,
+    pub country_code: String,
+    pub name: String,
+    pub fcl_name: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "UPPERCASE")]
+pub struct AdminCodes1 {
+    pub iso3166_2: String,
+}
