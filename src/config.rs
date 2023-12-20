@@ -207,6 +207,15 @@ lazy_static::lazy_static! {
         map.insert("hierarchy", vec!["tourism", "geography", "dependency"]);
         map
     };
+    pub static ref CITIES_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("north", vec![]);
+        map.insert("south", vec![]);
+        map.insert("east", vec![]);
+        map.insert("west", vec![]);
+        map.insert("maxRows", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";

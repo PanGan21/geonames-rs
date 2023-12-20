@@ -1,6 +1,7 @@
 use geonames_rs::{
-    AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CountryCodeResponse,
-    GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
+    AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
+    CitiesResponse, CountryCodeResponse, GeoNamesApi, Geoname, PostalCode,
+    PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -60,6 +61,41 @@ fn call_api_children() {
             country_code: "IT".to_string(),
             name: "Tuscany".to_string(),
             fcl_name: "country, state, region,...".to_string(),
+        }],
+    };
+
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_cities() {
+    let client = ApiClient::new(GeoNamesApi::Cities, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("north", "44.1");
+    params.insert("south", "-9.9");
+    params.insert("east", "-22.4");
+    params.insert("west", "55.2");
+    params.insert("maxRows", "1");
+
+    let result: CitiesResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = CitiesResponse {
+        geonames: vec![CitiesGeoname {
+            lng: 116.397228240967,
+            geoname_id: 1816670,
+            name: "Beijing".to_string(),
+            fcl_name: "city, village,...".to_string(),
+            toponym_name: "Beijing".to_string(),
+            fcode_name: "capital of a political entity".to_string(),
+            lat: 39.9074977414405,
+            fcl: "P".to_string(),
+            population: 18960744,
+            fcode: "PPLC".to_string(),
+            countrycode: "CN".to_string(),
+            wikipedia: "en.wikipedia.org/wiki/Beijing".to_string(),
         }],
     };
 

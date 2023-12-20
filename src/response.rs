@@ -82,3 +82,26 @@ pub struct Geoname {
 pub struct AdminCodes1 {
     pub iso3166_2: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct CitiesResponse {
+    pub geonames: Vec<CitiesGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct CitiesGeoname {
+    pub lng: f64,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub fcode_name: String,
+    pub lat: f64,
+    pub fcode: String,
+    pub fcl: String,
+    pub population: i32,
+    pub countrycode: String,
+    pub name: String,
+    pub fcl_name: String,
+    pub wikipedia: String,
+}
