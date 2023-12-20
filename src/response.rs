@@ -1,4 +1,5 @@
 use bytes::Bytes;
+use macros::ApiResponse;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 use crate::ApiError;
@@ -9,7 +10,7 @@ pub trait ApiResponse: DeserializeOwned + Serialize {
         Self: Sized;
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
 #[serde(rename_all = "camelCase")]
 pub struct CountryCodeResponse {
     pub languages: String,
@@ -18,7 +19,7 @@ pub struct CountryCodeResponse {
     pub country_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
 #[serde(rename_all = "camelCase")]
 pub struct PostalCodeSearchResponse {
     pub postal_codes: Vec<PostalCode>,
@@ -40,31 +41,10 @@ pub struct PostalCode {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
 #[serde(rename_all = "camelCase")]
 pub struct AstergdemResponse {
     pub lng: f64,
     pub lat: f64,
     pub astergdem: i32,
-}
-
-impl ApiResponse for CountryCodeResponse {
-    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
-        serde_json::from_slice(&bytes)
-            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
-    }
-}
-
-impl ApiResponse for PostalCodeSearchResponse {
-    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
-        serde_json::from_slice(&bytes)
-            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
-    }
-}
-
-impl ApiResponse for AstergdemResponse {
-    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
-        serde_json::from_slice(&bytes)
-            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
-    }
 }
