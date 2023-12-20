@@ -37,16 +37,10 @@ pub struct ApiClient {
 }
 
 #[derive(Debug)]
-pub struct ApiError {
-    pub message: String,
-}
-
-impl ApiError {
-    pub fn new(message: &str) -> Self {
-        ApiError {
-            message: message.to_string(),
-        }
-    }
+pub enum ApiError {
+    Deserialization(String),
+    UrlParse(String),
+    InvalidParams(String),
 }
 
 impl ApiClient {
@@ -72,7 +66,7 @@ impl ApiEndpoint for ApiClient {
                 if let Some(p) = params.clone() {
                     for (param, value) in p.clone() {
                         if !allowed_params.contains_key(param) {
-                            return Err(ApiError::new(&format!(
+                            return Err(ApiError::InvalidParams(format!(
                                 "Param '{}' not allowed for this API",
                                 param
                             )));
@@ -80,7 +74,7 @@ impl ApiEndpoint for ApiClient {
 
                         let allowed_values = allowed_params[param].clone();
                         if !allowed_values.is_empty() && !allowed_values.contains(&value) {
-                            return Err(ApiError::new(&format!(
+                            return Err(ApiError::InvalidParams(format!(
                                 "Invalid value '{}' for param '{}'",
                                 value, param
                             )));
@@ -90,7 +84,7 @@ impl ApiEndpoint for ApiClient {
             }
             None => {
                 if params.is_some() {
-                    return Err(ApiError::new(&format!(
+                    return Err(ApiError::InvalidParams(format!(
                         "Params for api {:?} should be None",
                         self.api
                     )));
@@ -105,7 +99,8 @@ impl ApiEndpoint for ApiClient {
             None => format!("{}{}{}", BASE_URI, api_name, "JSON"),
         };
 
-        let mut url = Url::parse(&base_url).map_err(|_| ApiError::new("Failed to parse URL"))?;
+        let mut url = Url::parse(&base_url)
+            .map_err(|e| ApiError::UrlParse(format!("Failed to parse URL: {}", e)))?;
 
         if let Some(p) = params {
             for (param, value) in p {
@@ -124,12 +119,12 @@ impl ApiEndpoint for ApiClient {
             .get(url)
             .send()
             .await
-            .map_err(|err| ApiError::new(&format!("HTTP request failed: {}", err)))?;
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
 
         let res = response
             .bytes()
             .await
-            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))?;
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
 
         eprintln!("HEREEEEEEEEE {:#?}", res);
 
@@ -195,13 +190,13 @@ impl ApiEndpoint for ApiClient {
 impl ApiResponse for CountryCodeResponse {
     fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
         serde_json::from_slice(&bytes)
-            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
     }
 }
 
 impl ApiResponse for PostalCodeSearchResponse {
     fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
         serde_json::from_slice(&bytes)
-            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
     }
 }

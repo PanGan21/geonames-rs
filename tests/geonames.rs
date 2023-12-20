@@ -53,12 +53,4 @@ fn call_api_postal_code_search() {
     };
 
     assert_eq!(result, expected_result);
-
-    // let excpected_result = CountryCodeResponse {
-    //     languages: "de-AT,hr,hu,sl".to_string(),
-    //     distance: "0".to_string(),
-    //     country_code: "AT".to_string(),
-    //     country_name: "Austria".to_string(),
-    // };
-    // assert_eq!(result, excpected_result);
 }
