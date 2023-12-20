@@ -1,5 +1,9 @@
 mod client;
 mod config;
+mod error;
+mod response;
 
-pub use client::{ApiClient, ApiEndpoint, ApiError};
+pub use client::*;
 pub use config::*;
+pub use error::*;
+pub use response::*;
