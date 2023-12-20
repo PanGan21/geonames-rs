@@ -180,6 +180,7 @@ lazy_static::lazy_static! {
     };
     pub static ref ASTERGDEM_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
         let mut map = HashMap::new();
+        map.insert("postalcodes", vec![]);
         map.insert("lat", vec![]);
         map.insert("lng", vec![]);
         map
@@ -233,4 +234,12 @@ pub struct PostalCode {
     pub iso: String,
     pub place_name: String,
     pub lat: f64,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct AstergdemResponse {
+    pub lng: f64,
+    pub lat: f64,
+    pub astergdem: i32,
 }

@@ -1,9 +1,31 @@
 use geonames_rs::{
-    ApiClient, ApiEndpoint, CountryCodeResponse, GeoNamesApi, PostalCode, PostalCodeSearchResponse,
+    ApiClient, ApiEndpoint, AstergdemResponse, CountryCodeResponse, GeoNamesApi, PostalCode,
+    PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
 const USERNAME: &str = env!("API_USER");
+
+#[test]
+fn call_api_astergdem() {
+    let client = ApiClient::new(GeoNamesApi::Astergdem, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47.03");
+    params.insert("lng", "10.02");
+
+    let result: AstergdemResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = AstergdemResponse {
+        lng: 10.02,
+        lat: 47.03,
+        astergdem: 1968,
+    };
+
+    assert_eq!(result, expected_result);
+}
 
 #[test]
 fn call_api_country_code() {

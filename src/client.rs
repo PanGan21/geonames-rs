@@ -5,13 +5,16 @@ use std::collections::HashMap;
 
 use reqwest::{Client, Url};
 
-use crate::config::{
-    CountryCodeResponse, GeoNamesApi, PostalCodeSearchResponse, ASTERGDEM_PARAMS, BASE_URI,
-    BASE_URI_COMMERCIAL, COUNTRY_CODE_PARAMS, COUNTRY_INFO_PARAMS, COUNTRY_SUBDIVISION_PARAMS,
-    EXTENDED_FIND_NEARBY_PARAMS, FIND_NEARBY_PARAMS, FIND_NEARBY_PLACE_NAME_PARAMS,
-    FIND_NEARBY_POSTAL_CODES_PARAMS, GET_PARAMS, GTOPO30_PARAMS, NEIGHBOURHOOD_PARAMS,
-    OCEAN_PARAMS, POSTAL_CODE_LOOKUP_PARAMS, POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS, SRTM3_PARAMS,
-    TIMEZONE_PARAMS,
+use crate::{
+    config::{
+        CountryCodeResponse, GeoNamesApi, PostalCodeSearchResponse, ASTERGDEM_PARAMS, BASE_URI,
+        BASE_URI_COMMERCIAL, COUNTRY_CODE_PARAMS, COUNTRY_INFO_PARAMS, COUNTRY_SUBDIVISION_PARAMS,
+        EXTENDED_FIND_NEARBY_PARAMS, FIND_NEARBY_PARAMS, FIND_NEARBY_PLACE_NAME_PARAMS,
+        FIND_NEARBY_POSTAL_CODES_PARAMS, GET_PARAMS, GTOPO30_PARAMS, NEIGHBOURHOOD_PARAMS,
+        OCEAN_PARAMS, POSTAL_CODE_LOOKUP_PARAMS, POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS,
+        SRTM3_PARAMS, TIMEZONE_PARAMS,
+    },
+    AstergdemResponse,
 };
 
 #[async_trait]
@@ -195,6 +198,13 @@ impl ApiResponse for CountryCodeResponse {
 }
 
 impl ApiResponse for PostalCodeSearchResponse {
+    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
+        serde_json::from_slice(&bytes)
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
+    }
+}
+
+impl ApiResponse for AstergdemResponse {
     fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
         serde_json::from_slice(&bytes)
             .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))
