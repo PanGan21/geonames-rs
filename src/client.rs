@@ -1,23 +1,33 @@
 use async_trait::async_trait;
+use bytes::Bytes;
+use serde::{de::DeserializeOwned, Serialize};
 use std::collections::HashMap;
 
 use reqwest::{Client, Url};
 
 use crate::config::{
-    GeoNamesApi, ASTERGDEM_PARAMS, BASE_URI, BASE_URI_COMMERCIAL, COUNTRY_CODE_PARAMS,
-    COUNTRY_INFO_PARAMS, COUNTRY_SUBDIVISION_PARAMS, EXTENDED_FIND_NEARBY_PARAMS,
-    FIND_NEARBY_PARAMS, FIND_NEARBY_PLACE_NAME_PARAMS, FIND_NEARBY_POSTAL_CODES_PARAMS, GET_PARAMS,
-    GTOPO30_PARAMS, NEIGHBOURHOOD_PARAMS, OCEAN_PARAMS, POSTAL_CODE_LOOKUP_PARAMS,
-    POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS, SRTM3_PARAMS, TIMEZONE_PARAMS,
+    CountryCodeResponse, GeoNamesApi, PostalCodeSearchResponse, ASTERGDEM_PARAMS, BASE_URI,
+    BASE_URI_COMMERCIAL, COUNTRY_CODE_PARAMS, COUNTRY_INFO_PARAMS, COUNTRY_SUBDIVISION_PARAMS,
+    EXTENDED_FIND_NEARBY_PARAMS, FIND_NEARBY_PARAMS, FIND_NEARBY_PLACE_NAME_PARAMS,
+    FIND_NEARBY_POSTAL_CODES_PARAMS, GET_PARAMS, GTOPO30_PARAMS, NEIGHBOURHOOD_PARAMS,
+    OCEAN_PARAMS, POSTAL_CODE_LOOKUP_PARAMS, POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS, SRTM3_PARAMS,
+    TIMEZONE_PARAMS,
 };
 
 #[async_trait]
 pub trait ApiEndpoint {
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>>;
-    async fn call_api(
+    fn response_type<T: ApiResponse>(&self, response_bytes: Bytes) -> T;
+    async fn call_api<T: ApiResponse>(
         &self,
         params: Option<HashMap<&'static str, &'static str>>,
-    ) -> Result<ApiResponse, ApiError>;
+    ) -> Result<T, ApiError>;
+}
+
+pub trait ApiResponse: DeserializeOwned + Serialize {
+    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError>
+    where
+        Self: Sized;
 }
 
 pub struct ApiClient {
@@ -25,8 +35,6 @@ pub struct ApiClient {
     username: &'static str,
     token: Option<&'static str>,
 }
-
-pub struct ApiResponse {}
 
 #[derive(Debug)]
 pub struct ApiError {
@@ -53,10 +61,10 @@ impl ApiClient {
 
 #[async_trait]
 impl ApiEndpoint for ApiClient {
-    async fn call_api(
+    async fn call_api<T: ApiResponse>(
         &self,
         params: Option<HashMap<&'static str, &'static str>>,
-    ) -> Result<ApiResponse, ApiError> {
+    ) -> Result<T, ApiError> {
         let maybe_allowed_params = self.allowed_params();
 
         match maybe_allowed_params {
@@ -110,7 +118,7 @@ impl ApiEndpoint for ApiClient {
         }
 
         url.query_pairs_mut().append_pair("username", self.username);
-        eprintln!("URL: {}", url);
+        eprintln!("URL {}", url.clone());
         let client = Client::new();
         let response = client
             .get(url)
@@ -118,9 +126,21 @@ impl ApiEndpoint for ApiClient {
             .await
             .map_err(|err| ApiError::new(&format!("HTTP request failed: {}", err)))?;
 
-        eprintln!("HEREEEEEEEEE {:#?}", response);
+        let res = response
+            .bytes()
+            .await
+            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))?;
 
-        Ok(ApiResponse {})
+        eprintln!("HEREEEEEEEEE {:#?}", res);
+
+        let api_res = self.response_type::<T>(res);
+
+        Ok(api_res)
+    }
+
+    fn response_type<T: ApiResponse>(&self, response_bytes: Bytes) -> T {
+        // Return a new instance of the specified response type
+        T::deserialize_response(response_bytes).expect("Failed to create response type")
     }
 
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>> {
@@ -169,5 +189,19 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::GeoCodeAddress => None,
             GeoNamesApi::StreetNameLookup => None,
         }
+    }
+}
+
+impl ApiResponse for CountryCodeResponse {
+    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
+        serde_json::from_slice(&bytes)
+            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))
+    }
+}
+
+impl ApiResponse for PostalCodeSearchResponse {
+    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError> {
+        serde_json::from_slice(&bytes)
+            .map_err(|e| ApiError::new(&format!("Deserialization error: {}", e)))
     }
 }
