@@ -2,7 +2,8 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyResponse, GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
+    FindNearbyPlaceResponse, FindNearbyResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
+    PostalCode, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -287,6 +288,45 @@ fn call_api_find_nearby() {
             country_code: "CH".to_string(),
             name: "Habrüti".to_string(),
             fcl_name: "spot, building, farm".to_string(),
+        }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_place_name() {
+    let client = ApiClient::new(GeoNamesApi::FindNearbyPlaceName, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47.3");
+    params.insert("lng", "9");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyPlaceResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyPlaceResponse {
+        geonames: vec![GeonameNearbyPlace {
+            admin_code_1: "SG".to_string(),
+            lng: "9.01488".to_string(),
+            geoname_id: 7910950,
+            toponym_name: "Chrüzegg".to_string(),
+            country_id: "2658434".to_string(),
+            admin_codes1: AdminCodes1 {
+                iso3166_2: "SG".to_string(),
+            },
+            country_name: "Switzerland".to_string(),
+            fcode_name: "section of populated place".to_string(),
+            admin_name1: "Saint Gallen".to_string(),
+            lat: "47.2985".to_string(),
+            fcode: "PPLX".to_string(),
+            fcl: "P".to_string(),
+            population: 0,
+            country_code: "CH".to_string(),
+            name: "Chrüzegg".to_string(),
+            fcl_name: "city, village,...".to_string(),
+            distance: "1.1379".to_string(),
         }],
     };
     assert_eq!(result, expected_result);

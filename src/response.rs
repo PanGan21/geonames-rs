@@ -184,3 +184,31 @@ pub struct Earthquake {
 pub struct FindNearbyResponse {
     pub geonames: Vec<Geoname>,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyPlaceResponse {
+    pub geonames: Vec<GeonameNearbyPlace>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct GeonameNearbyPlace {
+    pub admin_code_1: String,
+    pub lng: String,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub country_id: String,
+    pub admin_codes1: AdminCodes1,
+    pub country_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+    pub lat: String,
+    pub fcode: String,
+    pub fcl: String,
+    pub population: i32,
+    pub country_code: String,
+    pub name: String,
+    pub fcl_name: String,
+    pub distance: String,
+}
