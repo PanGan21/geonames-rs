@@ -6,7 +6,8 @@ use geonames_rs::{
     FindNearbyByWikipediaResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
     FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoCodeAddress, GeoCodeAddressResponse,
     GeoNamesApi, Geoname, GeonameNearbyPlace, Poi, PostalCode, PostalCodeFindNearby,
-    PostalCodeSearchResponse, StreetSegment, WeatherObservation, WikipediaGeoname,
+    PostalCodeSearchResponse, StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment,
+    WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -550,6 +551,39 @@ fn call_api_geo_code_address() {
             admin_name1: "Groningen".to_string(),
             lat: "53.10643".to_string(),
         },
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_street_name_lookup() {
+    let client = ApiClient::new(GeoNamesApi::StreetNameLookup, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("q", "Museum");
+    params.insert("adminCode2", "59350");
+    params.insert("postalcode", "6635");
+
+    let result: StreetNameLookupResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = StreetNameLookupResponse {
+        address: vec![StreetNameLookupAddress {
+            admin_code2: "59350".to_string(),
+            admin_code3: "".to_string(),
+            admin_code1: "08".to_string(),
+            lng: "116.68179".to_string(),
+            house_number: "".to_string(),
+            locality: "Yalgoo".to_string(),
+            admin_code4: "".to_string(),
+            admin_name2: "Yalgoo".to_string(),
+            street: "Museum Court".to_string(),
+            postalcode: "6635".to_string(),
+            country_code: "AU".to_string(),
+            admin_name1: "Western Australia".to_string(),
+            lat: "-28.3414".to_string(),
+        }],
     };
     assert_eq!(result, expected_result);
 }

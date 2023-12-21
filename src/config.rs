@@ -24,6 +24,8 @@ pub enum GeoNamesApi {
     #[serde(rename = "findNearbyPOIsOSM")]
     FindNearbyPoisOsm,
     Address,
+    GeoCodeAddress,
+    StreetNameLookup,
     Get,
     Gtopo30,
     Hierarchy,
@@ -43,8 +45,6 @@ pub enum GeoNamesApi {
     WeatherIcao,
     WikipediaBoundingBox,
     WikipediaSearch,
-    GeoCodeAddress,
-    StreetNameLookup,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -273,6 +273,17 @@ lazy_static::lazy_static! {
         map.insert("q", vec![]);
         map.insert("country", vec![]);
         map.insert("postalcode", vec![]);
+        map
+    };
+    pub static ref STREET_NAME_LOOKUP_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("q", vec![]);
+        map.insert("country", vec![]);
+        map.insert("postalcode", vec![]);
+        map.insert("adminCode1", vec![]);
+        map.insert("adminCode2", vec![]);
+        map.insert("adminCode3", vec![]);
+        map.insert("isUniqueStreetName", vec![]);
         map
     };
 }
