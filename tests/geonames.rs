@@ -1,7 +1,8 @@
 use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
-    GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
+    CountrySubvisionCode, CountrySubvisionResponse, GeoNamesApi, Geoname, PostalCode,
+    PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -193,6 +194,33 @@ fn call_api_country_info() {
             continent_name: "Europe".to_string(),
             currency_code: "EUR".to_string(),
         }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_country_subvision() {
+    let client = ApiClient::new(GeoNamesApi::CountrySubdivision, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47.03");
+    params.insert("lng", "10.2");
+
+    let result: CountrySubvisionResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = CountrySubvisionResponse {
+        codes: vec![CountrySubvisionCode {
+            code: "7".to_string(),
+            level: "1".to_string(),
+            ty: "ISO3166-2".to_string(),
+        }],
+        admin_code1: "07".to_string(),
+        distance: 0.0,
+        country_code: "AT".to_string(),
+        country_name: "Austria".to_string(),
+        admin_name1: "Tyrol".to_string(),
     };
     assert_eq!(result, expected_result);
 }

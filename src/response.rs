@@ -140,3 +140,23 @@ pub struct CountryInfoGeoname {
     pub continent_name: String,
     pub currency_code: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct CountrySubvisionResponse {
+    pub codes: Vec<CountrySubvisionCode>,
+    pub admin_code1: String,
+    pub distance: f64,
+    pub country_code: String,
+    pub country_name: String,
+    pub admin_name1: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct CountrySubvisionCode {
+    pub code: String,
+    pub level: String,
+    #[serde(rename = "type")]
+    pub ty: String,
+}
