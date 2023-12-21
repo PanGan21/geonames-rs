@@ -347,3 +347,28 @@ pub struct Address {
     pub admin_name1: String,
     pub lat: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct GeoCodeAddressResponse {
+    pub address: GeoCodeAddress,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct GeoCodeAddress {
+    pub admin_code2: String,
+    pub source_id: String,
+    pub admin_code3: String,
+    pub admin_code1: String,
+    pub lng: String,
+    pub house_number: String,
+    pub locality: String,
+    pub admin_code4: String,
+    pub admin_name2: String,
+    pub street: String,
+    pub postalcode: String,
+    pub country_code: String,
+    pub admin_name1: String,
+    pub lat: String,
+}

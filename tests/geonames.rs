@@ -4,9 +4,9 @@ use geonames_rs::{
     CountryInfoGeoname, CountryInfoResponse, CountrySubvisionCode, CountrySubvisionResponse,
     Earthquake, EarthquakesResponse, FindNearbyByPoisOsmResponse, FindNearbyByWeatherResponse,
     FindNearbyByWikipediaResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
-    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
-    Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment,
-    WeatherObservation, WikipediaGeoname,
+    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoCodeAddress, GeoCodeAddressResponse,
+    GeoNamesApi, Geoname, GeonameNearbyPlace, Poi, PostalCode, PostalCodeFindNearby,
+    PostalCodeSearchResponse, StreetSegment, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -517,6 +517,38 @@ fn call_api_address() {
             country_code: "NL".to_string(),
             admin_name1: "North Holland".to_string(),
             lat: "52.35792".to_string(),
+        },
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_geo_code_address() {
+    let client = ApiClient::new(GeoNamesApi::GeoCodeAddress, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("q", "Museumplein 6 amsterdam");
+
+    let result: GeoCodeAddressResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = GeoCodeAddressResponse {
+        address: GeoCodeAddress {
+            admin_code2: "0047".to_string(),
+            source_id: "0047200000307407".to_string(),
+            admin_code3: "".to_string(),
+            admin_code1: "04".to_string(),
+            lng: "6.87625".to_string(),
+            house_number: "10".to_string(),
+            locality: "Veendam".to_string(),
+            admin_code4: "".to_string(),
+            admin_name2: "Veendam Municipality".to_string(),
+            street: "Museumplein".to_string(),
+            postalcode: "9641 AD".to_string(),
+            country_code: "NL".to_string(),
+            admin_name1: "Groningen".to_string(),
+            lat: "53.10643".to_string(),
         },
     };
     assert_eq!(result, expected_result);

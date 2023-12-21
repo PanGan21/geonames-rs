@@ -268,6 +268,13 @@ lazy_static::lazy_static! {
         map.insert("radius", vec![]);
         map
     };
+    pub static ref GEO_CODE_ADDRESS_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("q", vec![]);
+        map.insert("country", vec![]);
+        map.insert("postalcode", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";
