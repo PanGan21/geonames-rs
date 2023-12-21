@@ -13,6 +13,7 @@ use crate::{
     },
     response::ApiResponse,
     ApiError, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
+    FIND_NEARBY_STREETS_0SM_PARAMS,
 };
 
 #[async_trait]
@@ -133,8 +134,7 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::FindNearby => Some(&FIND_NEARBY_PARAMS),
             GeoNamesApi::FindNearbyPlaceName => Some(&FIND_NEARBY_PLACE_NAME_PARAMS),
             GeoNamesApi::FindNearbyPostalCodes => Some(&FIND_NEARBY_POSTAL_CODES_PARAMS),
-            GeoNamesApi::FindNearbyStreets => None,
-            GeoNamesApi::FindNearbyStreetsOsm => None,
+            GeoNamesApi::FindNearbyStreetsOsm => Some(&FIND_NEARBY_STREETS_0SM_PARAMS),
             GeoNamesApi::FindNearByWeather => None,
             GeoNamesApi::FindNearbyWikipedia => None,
             GeoNamesApi::FindNearestAddress => None,

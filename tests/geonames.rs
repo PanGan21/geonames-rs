@@ -2,8 +2,9 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse, GeoNamesApi,
-    Geoname, GeonameNearbyPlace, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
+    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse,
+    FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, PostalCode,
+    PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment,
 };
 use std::collections::HashMap;
 
@@ -360,6 +361,32 @@ fn call_api_find_nearby_postal_codes() {
             place_name: "Luchsingen".to_string(),
             lat: 46.9764148249,
         }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_streets_osm() {
+    let client = ApiClient::new(GeoNamesApi::FindNearbyStreetsOsm, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "37.451");
+    params.insert("lng", "-122.18");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyStreetsOSMResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyStreetsOSMResponse {
+        street_segment: StreetSegment {
+            way_id: "8928471".to_string(),
+            distance: "0.06".to_string(),
+            line: "-122.1796917 37.4520107,-122.1798016 37.4518965,-122.1799937 37.4516636,-122.1801139 37.4515178,-122.1808293 37.4506505,-122.180988 37.4504593,-122.1817112 37.4495966,-122.1822516 37.4489518,-122.1831946 37.4478272,-122.1832534 37.4477571".to_string(),
+            country_code: "US".to_string(),
+            name: "Roble Avenue".to_string(),
+            highway: "residential".to_string(),
+        },
     };
     assert_eq!(result, expected_result);
 }

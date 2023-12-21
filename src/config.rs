@@ -16,7 +16,7 @@ pub enum GeoNamesApi {
     FindNearby,
     FindNearbyPlaceName,
     FindNearbyPostalCodes,
-    FindNearbyStreets, // only USA
+    #[serde(rename = "findNearbyStreetsOSM")]
     FindNearbyStreetsOsm,
     FindNearByWeather,
     FindNearbyWikipedia,
@@ -225,6 +225,14 @@ lazy_static::lazy_static! {
         map.insert("west", vec![]);
         map.insert("date", vec![]);
         map.insert("minMagnitude", vec![]);
+        map.insert("maxRows", vec![]);
+        map
+    };
+    pub static ref FIND_NEARBY_STREETS_0SM_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("lat", vec![]);
+        map.insert("lng", vec![]);
+        map.insert("radius", vec![]);
         map.insert("maxRows", vec![]);
         map
     };

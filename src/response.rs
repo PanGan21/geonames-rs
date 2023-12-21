@@ -235,3 +235,20 @@ pub struct PostalCodeFindNearby {
     pub place_name: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyStreetsOSMResponse {
+    pub street_segment: StreetSegment,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct StreetSegment {
+    pub way_id: String,
+    pub distance: String,
+    pub line: String,
+    pub country_code: String,
+    pub name: String,
+    pub highway: String,
+}
