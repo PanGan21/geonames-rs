@@ -7,9 +7,9 @@ use geonames_rs::{
     FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
     GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameHierarchy,
     GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
-    NeighboursResponse, Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
-    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
-    WikipediaGeoname,
+    NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeFindNearby,
+    PostalCodeSearchResponse, StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment,
+    Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -962,6 +962,29 @@ fn call_api_neighbours() {
     };
     assert_eq!(result, expected_response);
 }
+
+#[test]
+fn call_api_ocean() {
+    let client = ApiClient::new(GeoNamesApi::Ocean, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "40.7834");
+    params.insert("lng", "-43.96635");
+
+    let result: OceanResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_response = OceanResponse {
+        ocean: Ocean {
+            distance: "0".to_string(),
+            geoname_id: 3411923,
+            name: "North Atlantic Ocean".to_string(),
+        },
+    };
+    assert_eq!(result, expected_response);
+}
+
 #[test]
 fn call_api_postal_code_search() {
     let client = ApiClient::new(GeoNamesApi::PostalCodeSearch, USERNAME, None);

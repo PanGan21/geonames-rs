@@ -501,7 +501,7 @@ pub struct NeighboursResponse {
     pub geonames: Vec<NeighboursGeoname>,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct NeighboursGeoname {
     pub admin_code1: String,
@@ -519,4 +519,18 @@ pub struct NeighboursGeoname {
     pub admin_name1: String,
     pub lat: String,
     pub fcode: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct OceanResponse {
+    pub ocean: Ocean,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Ocean {
+    pub distance: String,
+    pub geoname_id: i32,
+    pub name: String,
 }
