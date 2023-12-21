@@ -1,8 +1,8 @@
 use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
-    CountrySubvisionCode, CountrySubvisionResponse, GeoNamesApi, Geoname, PostalCode,
-    PostalCodeSearchResponse,
+    CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse, GeoNamesApi,
+    Geoname, PostalCode, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -221,6 +221,35 @@ fn call_api_country_subvision() {
         country_code: "AT".to_string(),
         country_name: "Austria".to_string(),
         admin_name1: "Tyrol".to_string(),
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_earthquakes() {
+    let client = ApiClient::new(GeoNamesApi::Earthquakes, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("north", "44.1");
+    params.insert("south", "-9.9");
+    params.insert("east", "-22.4");
+    params.insert("west", "55.2");
+    params.insert("maxRows", "1");
+
+    let result: EarthquakesResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = EarthquakesResponse {
+        earthquakes: vec![Earthquake {
+            datetime: "2011-03-11 04:46:23".to_string(),
+            depth: 24.4,
+            lng: 142.369,
+            src: "us".to_string(),
+            eqid: "c0001xgp".to_string(),
+            magnitude: 8.8,
+            lat: 38.322,
+        }],
     };
     assert_eq!(result, expected_result);
 }

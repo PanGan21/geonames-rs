@@ -12,7 +12,7 @@ use crate::{
         POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS, SRTM3_PARAMS, TIMEZONE_PARAMS,
     },
     response::ApiResponse,
-    ApiError, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS,
+    ApiError, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
 };
 
 #[async_trait]
@@ -129,7 +129,7 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::CountryCode => Some(&COUNTRY_CODE_PARAMS),
             GeoNamesApi::CountryInfo => Some(&COUNTRY_INFO_PARAMS),
             GeoNamesApi::CountrySubdivision => Some(&COUNTRY_SUBDIVISION_PARAMS),
-            GeoNamesApi::Earthquakes => None,
+            GeoNamesApi::Earthquakes => Some(&EARTHQUAKES_PARAMS),
             GeoNamesApi::ExtendedFindNearby => Some(&EXTENDED_FIND_NEARBY_PARAMS),
             GeoNamesApi::FindNearby => Some(&FIND_NEARBY_PARAMS),
             GeoNamesApi::FindNearbyPlaceName => Some(&FIND_NEARBY_PLACE_NAME_PARAMS),

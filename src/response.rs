@@ -160,3 +160,21 @@ pub struct CountrySubvisionCode {
     #[serde(rename = "type")]
     pub ty: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct EarthquakesResponse {
+    pub earthquakes: Vec<Earthquake>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Earthquake {
+    pub datetime: String,
+    pub depth: f64,
+    pub lng: f64,
+    pub src: String,
+    pub eqid: String,
+    pub magnitude: f64,
+    pub lat: f64,
+}
