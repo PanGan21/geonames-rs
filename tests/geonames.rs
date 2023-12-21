@@ -1,7 +1,7 @@
 use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
-    CitiesResponse, ContainsResponse, CountryCodeResponse, GeoNamesApi, Geoname, PostalCode,
-    PostalCodeSearchResponse,
+    CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
+    GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -152,13 +152,49 @@ fn call_api_country_code() {
         .block_on(client.call_api(Some(params)))
         .unwrap();
 
-    let excpected_result = CountryCodeResponse {
+    let expected_result = CountryCodeResponse {
         languages: "de-AT,hr,hu,sl".to_string(),
         distance: "0".to_string(),
         country_code: "AT".to_string(),
         country_name: "Austria".to_string(),
     };
-    assert_eq!(result, excpected_result);
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_country_info() {
+    let client = ApiClient::new(GeoNamesApi::CountryInfo, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("country", "NL");
+
+    let result: CountryInfoResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = CountryInfoResponse {
+        geonames: vec![CountryInfoGeoname {
+            continent: "EU".to_string(),
+            capital: "Amsterdam".to_string(),
+            languages: "nl-NL,fy-NL".to_string(),
+            geoname_id: 2750405,
+            south: 50.7503674993741,
+            iso_alpha3: "NLD".to_string(),
+            north: 53.5157125645109,
+            fips_code: "NL".to_string(),
+            population: "17231017".to_string(),
+            east: 7.22749859212922,
+            iso_numeric: "528".to_string(),
+            area_in_sq_km: "41526.0".to_string(),
+            country_code: "NL".to_string(),
+            west: 3.35837827202,
+            country_name: "The Netherlands".to_string(),
+            postal_code_format: "#### @@".to_string(),
+            continent_name: "Europe".to_string(),
+            currency_code: "EUR".to_string(),
+        }],
+    };
+    assert_eq!(result, expected_result);
 }
 
 #[test]

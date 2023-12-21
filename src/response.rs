@@ -111,3 +111,32 @@ pub struct CitiesGeoname {
 pub struct ContainsResponse {
     pub geonames: Vec<Geoname>,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct CountryInfoResponse {
+    pub geonames: Vec<CountryInfoGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct CountryInfoGeoname {
+    pub continent: String,
+    pub capital: String,
+    pub languages: String,
+    pub geoname_id: i32,
+    pub south: f64,
+    pub iso_alpha3: String,
+    pub north: f64,
+    pub fips_code: String,
+    pub population: String,
+    pub east: f64,
+    pub iso_numeric: String,
+    pub area_in_sq_km: String,
+    pub country_code: String,
+    pub west: f64,
+    pub country_name: String,
+    pub postal_code_format: String,
+    pub continent_name: String,
+    pub currency_code: String,
+}
