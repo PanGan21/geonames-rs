@@ -534,3 +534,19 @@ pub struct Ocean {
     pub geoname_id: i32,
     pub name: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct PostalCodeCountryInfoResponse {
+    pub geonames: Vec<PostalCodeCountryInfoGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct PostalCodeCountryInfoGeoname {
+    pub num_postal_codes: i32,
+    pub max_postal_code: String,
+    pub country_code: String,
+    pub min_postal_code: String,
+    pub country_name: String,
+}

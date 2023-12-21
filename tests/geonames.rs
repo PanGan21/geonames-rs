@@ -7,9 +7,10 @@ use geonames_rs::{
     FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
     GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameHierarchy,
     GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
-    NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeFindNearby,
-    PostalCodeSearchResponse, StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment,
-    Timezone, WeatherObservation, WikipediaGeoname,
+    NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeCountryInfoGeoname,
+    PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeSearchResponse,
+    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
+    WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -983,6 +984,28 @@ fn call_api_ocean() {
         },
     };
     assert_eq!(result, expected_response);
+}
+
+#[test]
+fn call_api_postal_code_country_info() {
+    let client = ApiClient::new(GeoNamesApi::PostalCodeCountryInfo, USERNAME, None);
+
+    let result: PostalCodeCountryInfoResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(None))
+        .unwrap();
+
+    let expected_result = PostalCodeCountryInfoResponse {
+        geonames: vec![PostalCodeCountryInfoGeoname {
+            num_postal_codes: 7,
+            max_postal_code: "AD700".to_string(),
+            country_code: "AD".to_string(),
+            min_postal_code: "AD100".to_string(),
+            country_name: "Andorra".to_string(),
+        }],
+    };
+
+    assert_eq!(result.geonames[0], expected_result.geonames[0]);
 }
 
 #[test]
