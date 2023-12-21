@@ -236,6 +236,13 @@ lazy_static::lazy_static! {
         map.insert("maxRows", vec![]);
         map
     };
+    pub static ref FIND_NEARBY_BY_WEATHER_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("lat", vec![]);
+        map.insert("lng", vec![]);
+        map.insert("radius", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";

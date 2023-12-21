@@ -2,9 +2,9 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse,
-    FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, PostalCode,
-    PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment,
+    FindNearbyByWeatherResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
+    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
+    PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment, WeatherObservation,
 };
 use std::collections::HashMap;
 
@@ -386,6 +386,43 @@ fn call_api_find_nearby_streets_osm() {
             country_code: "US".to_string(),
             name: "Roble Avenue".to_string(),
             highway: "residential".to_string(),
+        },
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_by_weather() {
+    let client = ApiClient::new(GeoNamesApi::FindNearByWeather, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "43");
+    params.insert("lng", "-2");
+
+    let result: FindNearbyByWeatherResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyByWeatherResponse {
+        weather_observation: WeatherObservation {
+            elevation: 8,
+            lng: -1.8,
+            observation: "LESO 211300Z 24008KT 200V300 2400 RA BR BKN005 OVC009 12/11 Q1030"
+                .to_string(),
+            icao: "LESO".to_string(),
+            clouds: "broken clouds".to_string(),
+            dew_point: "11".to_string(),
+            clouds_code: "BKN".to_string(),
+            datetime: "2023-12-21 13:00:00".to_string(),
+            country_code: "ES".to_string(),
+            temperature: "12".to_string(),
+            humidity: 93.0,
+            station_name: "San Sebastian / Fuenterrabia".to_string(),
+            weather_condition: "n/a".to_string(),
+            wind_direction: 240,
+            hecto_pasc_altimeter: 1030,
+            wind_speed: "08".to_string(),
+            lat: 43.35,
         },
     };
     assert_eq!(result, expected_result);

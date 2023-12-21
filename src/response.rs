@@ -252,3 +252,32 @@ pub struct StreetSegment {
     pub name: String,
     pub highway: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyByWeatherResponse {
+    pub weather_observation: WeatherObservation,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WeatherObservation {
+    pub elevation: i32,
+    pub lng: f64,
+    pub observation: String,
+    #[serde(rename = "ICAO")]
+    pub icao: String,
+    pub clouds: String,
+    pub dew_point: String,
+    pub clouds_code: String,
+    pub datetime: String,
+    pub country_code: String,
+    pub temperature: String,
+    pub humidity: f64,
+    pub station_name: String,
+    pub weather_condition: String,
+    pub wind_direction: i32,
+    pub hecto_pasc_altimeter: i32,
+    pub wind_speed: String,
+    pub lat: f64,
+}
