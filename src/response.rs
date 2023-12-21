@@ -212,3 +212,26 @@ pub struct GeonameNearbyPlace {
     pub fcl_name: String,
     pub distance: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyPostalCodesResponse {
+    pub postal_codes: Vec<PostalCodeFindNearby>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct PostalCodeFindNearby {
+    pub admin_code1: String,
+    pub admin_code2: String,
+    pub admin_code3: String,
+    pub admin_name1: String,
+    pub admin_name2: String,
+    pub admin_name3: String,
+    pub lng: f64,
+    pub distance: String,
+    pub country_code: String,
+    pub postal_code: String,
+    pub place_name: String,
+    pub lat: f64,
+}

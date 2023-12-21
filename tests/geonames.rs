@@ -2,8 +2,8 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyPlaceResponse, FindNearbyResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
-    PostalCode, PostalCodeSearchResponse,
+    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse, GeoNamesApi,
+    Geoname, GeonameNearbyPlace, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -327,6 +327,38 @@ fn call_api_find_nearby_place_name() {
             name: "Chrüzegg".to_string(),
             fcl_name: "city, village,...".to_string(),
             distance: "1.1379".to_string(),
+        }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_postal_codes() {
+    let client = ApiClient::new(GeoNamesApi::FindNearbyPostalCodes, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47");
+    params.insert("lng", "9");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyPostalCodesResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyPostalCodesResponse {
+        postal_codes: vec![PostalCodeFindNearby {
+            admin_code1: "GL".to_string(),
+            admin_code2: "800".to_string(),
+            admin_code3: "1631".to_string(),
+            admin_name1: "Kanton Glarus".to_string(),
+            admin_name2: "Glarus".to_string(),
+            admin_name3: "Glarus Süd".to_string(),
+            lng: 9.00123733838,
+            distance: "2.6241".to_string(),
+            country_code: "CH".to_string(),
+            postal_code: "8775".to_string(),
+            place_name: "Luchsingen".to_string(),
+            lat: 46.9764148249,
         }],
     };
     assert_eq!(result, expected_result);
