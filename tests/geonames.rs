@@ -2,9 +2,10 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyByWeatherResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
-    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
-    PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment, WeatherObservation,
+    FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
+    FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi,
+    Geoname, GeonameNearbyPlace, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
+    StreetSegment, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -425,6 +426,38 @@ fn call_api_find_nearby_by_weather() {
             lat: 43.35,
         },
     };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_by_wikipedia() {
+    let client = ApiClient::new(GeoNamesApi::FindNearbyWikipedia, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47");
+    params.insert("lng", "9");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyByWikipediaResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyByWikipediaResponse {
+            geonames: vec![WikipediaGeoname {
+                summary: "The Glärnisch is a mountain massif of the Schwyz Alps, overlooking the valley of the Linth in the Swiss canton of Glarus. It consists of several summits, of which the highest, Bächistock, is 2,915 metres above sea level (...)".to_string(),
+                elevation: 2880f64,
+                geo_name_id: 2660595,
+                feature: "mountain".to_string(),
+                lng: 8.99849,
+                distance: "0.1853".to_string(),
+                country_code: "CH".to_string(),
+                rank: 93,
+                lang: "en".to_string(),
+                title: "Glärnisch".to_string(),
+                lat: 46.99869,
+                wikipedia_url: "en.wikipedia.org/wiki/Gl%C3%A4rnisch".to_string(),
+            }],
+        };
     assert_eq!(result, expected_result);
 }
 

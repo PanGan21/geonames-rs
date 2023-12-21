@@ -281,3 +281,26 @@ pub struct WeatherObservation {
     pub wind_speed: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyByWikipediaResponse {
+    pub geonames: Vec<WikipediaGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WikipediaGeoname {
+    pub summary: String,
+    pub elevation: f64,
+    pub geo_name_id: i32,
+    pub feature: String,
+    pub lng: f64,
+    pub distance: String,
+    pub country_code: String,
+    pub rank: i32,
+    pub lang: String,
+    pub title: String,
+    pub lat: f64,
+    pub wikipedia_url: String,
+}

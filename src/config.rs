@@ -243,6 +243,18 @@ lazy_static::lazy_static! {
         map.insert("radius", vec![]);
         map
     };
+    pub static ref FIND_NEARBY_BY_WIKIPEDIA_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("lang", vec![]);
+        map.insert("lat", vec![]);
+        map.insert("lng", vec![]);
+        map.insert("radius", vec![]);
+        map.insert("maxRows", vec![]);
+        map.insert("country", vec![]);
+        map.insert("postalCode", vec![]);
+        map.insert("length", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";
