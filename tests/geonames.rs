@@ -1,13 +1,13 @@
 use geonames_rs::{
-    Address, AddressResponse, AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse,
-    ChildrenResponse, CitiesGeoname, CitiesResponse, ContainsResponse, CountryCodeResponse,
-    CountryInfoGeoname, CountryInfoResponse, CountrySubvisionCode, CountrySubvisionResponse,
-    Earthquake, EarthquakesResponse, FindNearbyByPoisOsmResponse, FindNearbyByWeatherResponse,
-    FindNearbyByWikipediaResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
-    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoCodeAddress, GeoCodeAddressResponse,
-    GeoNamesApi, Geoname, GeonameNearbyPlace, Poi, PostalCode, PostalCodeFindNearby,
-    PostalCodeSearchResponse, StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment,
-    WeatherObservation, WikipediaGeoname,
+    Address, AddressResponse, AdminCodes1, AlternateName, ApiClient, ApiEndpoint,
+    AstergdemResponse, Bbox, ChildrenResponse, CitiesGeoname, CitiesResponse, ContainsResponse,
+    CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse, CountrySubvisionCode,
+    CountrySubvisionResponse, Earthquake, EarthquakesResponse, FindNearbyByPoisOsmResponse,
+    FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
+    FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
+    GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, GetResponse,
+    Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetNameLookupAddress,
+    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -584,6 +584,103 @@ fn call_api_street_name_lookup() {
             admin_name1: "Western Australia".to_string(),
             lat: "-28.3414".to_string(),
         }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_get() {
+    let client = ApiClient::new(GeoNamesApi::Get, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "2746385");
+
+    let result: GetResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = GetResponse {
+        timezone: Timezone {
+            gmt_offset: 1f64,
+            time_zone_id: "Europe/Amsterdam".to_string(),
+            dst_offset: 2f64,
+        },
+        bbox: Bbox {
+            east: 4.90836736921802,
+            south: 52.9842910190593,
+            north: 53.1847360990614,
+            west: 4.70705799730483,
+            accuracy_level: 0,
+        },
+        ascii_name: "Texel".to_string(),
+        astergdem: 7f64,
+        country_id: "2750405".to_string(),
+        fcl: "T".to_string(),
+        srtm3: -1f64,
+        admin_id2: "2746383".to_string(),
+        country_code: "NL".to_string(),
+        admin_codes1: AdminCodes1 {
+            iso3166_2: "NH".to_string(),
+        },
+        admin_id1: "2749879".to_string(),
+        lat: "53.08333".to_string(),
+        fcode: "ISL".to_string(),
+        continent_code: "EU".to_string(),
+        admin_code2: "0448".to_string(),
+        admin_code1: "07".to_string(),
+        lng: "4.83333".to_string(),
+        geoname_id: 2746385,
+        toponym_name: "Texel".to_string(),
+        population: 0,
+        wikipedia_url: "en.wikipedia.org/wiki/Texel".to_string(),
+        admin_name5: "".to_string(),
+        admin_name4: "".to_string(),
+        admin_name3: "".to_string(),
+        alternate_names: vec![
+                AlternateName { name: "텍셀".to_string(), lang: Some("ko".to_string()) },
+        AlternateName { name: "https://en.wikipedia.org/wiki/Texel".to_string(), lang: Some("link".to_string()) },
+        AlternateName{
+          name: "https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D0%BA%D1%81%D0%B5%D0%BB_%28%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B2%29".to_string(),
+          lang: Some("link".to_string())
+        },
+        AlternateName { name: "Q47009672".to_string(), lang: Some("wkdt".to_string()) },
+        AlternateName { name: "Tekselis".to_string(), lang: Some("lt".to_string()) },
+        AlternateName { name: "Tessel".to_string(), lang: Some("fy".to_string()) },
+        AlternateName { name: "Tessel".to_string(), lang: Some("li".to_string()) },
+        AlternateName { name: "Tessel".to_string(), lang: None },
+        AlternateName { name: "Texel".to_string(), lang: Some("ca".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("de".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("en".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("eo".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("es".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("fr".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("id".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("it".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("nl".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: Some("sv".to_string()) },
+        AlternateName { name: "Texel".to_string(), lang: None },
+        AlternateName { name: "Тексел".to_string(), lang: Some("ru".to_string()) },
+        AlternateName { name: "Тесел".to_string(), lang: Some("uk".to_string()) },
+        AlternateName{
+          name: "ტექსელი".to_string(),
+          lang: Some("ka".to_string())
+        },
+        AlternateName { name: "Թեսել".to_string(), lang: Some("hy".to_string()) },
+        AlternateName { name: "טסל".to_string(), lang: Some("he".to_string()) },
+        AlternateName { name: "تيكسل".to_string(), lang: Some("ar".to_string()) },
+        AlternateName{
+          name: "เทกเซล".to_string(),
+          lang: Some("th".to_string())
+        },
+        AlternateName { name: "テセル".to_string(), lang: Some("ja".to_string()) },
+        AlternateName { name: "特塞尔".to_string(), lang: Some("zh".to_string()) }
+            ],
+        admin_name2: "Texel Municipality".to_string(),
+        name: "Texel".to_string(),
+        fcl_name: "mountain,hill,rock,... ".to_string(),
+        country_name: "The Netherlands".to_string(),
+        fcode_name: "island".to_string(),
+        admin_name1: "North Holland".to_string(),
     };
     assert_eq!(result, expected_result);
 }

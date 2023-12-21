@@ -396,3 +396,65 @@ pub struct StreetNameLookupAddress {
     pub admin_name1: String,
     pub lat: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct GetResponse {
+    pub timezone: Timezone,
+    pub bbox: Bbox,
+    pub ascii_name: String,
+    pub astergdem: f64,
+    pub country_id: String,
+    pub fcl: String,
+    pub srtm3: f64,
+    pub admin_id2: String,
+    pub country_code: String,
+    pub admin_codes1: AdminCodes1,
+    pub admin_id1: String,
+    pub lat: String,
+    pub fcode: String,
+    pub continent_code: String,
+    pub admin_code2: String,
+    pub admin_code1: String,
+    pub lng: String,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub population: i32,
+    #[serde(rename = "wikipediaURL")]
+    pub wikipedia_url: String,
+    pub admin_name5: String,
+    pub admin_name4: String,
+    pub admin_name3: String,
+    pub alternate_names: Vec<AlternateName>,
+    pub admin_name2: String,
+    pub name: String,
+    pub fcl_name: String,
+    pub country_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Timezone {
+    pub gmt_offset: f64,
+    pub time_zone_id: String,
+    pub dst_offset: f64,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Bbox {
+    pub east: f64,
+    pub south: f64,
+    pub north: f64,
+    pub west: f64,
+    pub accuracy_level: i32,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct AlternateName {
+    pub name: String,
+    pub lang: Option<String>,
+}
