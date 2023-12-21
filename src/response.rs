@@ -458,3 +458,11 @@ pub struct AlternateName {
     pub name: String,
     pub lang: Option<String>,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct Gtopo30Response {
+    pub lng: f64,
+    pub gtopo30: f64,
+    pub lat: f64,
+}

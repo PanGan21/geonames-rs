@@ -6,8 +6,9 @@ use geonames_rs::{
     FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
     FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
     GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, GetResponse,
-    Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
+    Gtopo30Response, Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
+    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
+    WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -681,6 +682,26 @@ fn call_api_get() {
         country_name: "The Netherlands".to_string(),
         fcode_name: "island".to_string(),
         admin_name1: "North Holland".to_string(),
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_gtopo30() {
+    let client = ApiClient::new(GeoNamesApi::Gtopo30, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47.01");
+    params.insert("lng", "10.02");
+
+    let result: Gtopo30Response = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = Gtopo30Response {
+        lng: 10.02,
+        gtopo30: 2053f64,
+        lat: 47.01,
     };
     assert_eq!(result, expected_result);
 }
