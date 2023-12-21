@@ -105,3 +105,9 @@ pub struct CitiesGeoname {
     pub fcl_name: String,
     pub wikipedia: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct ContainsResponse {
+    pub geonames: Vec<Geoname>,
+}

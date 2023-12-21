@@ -1,6 +1,6 @@
 use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
-    CitiesResponse, CountryCodeResponse, GeoNamesApi, Geoname, PostalCode,
+    CitiesResponse, ContainsResponse, CountryCodeResponse, GeoNamesApi, Geoname, PostalCode,
     PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
@@ -96,6 +96,44 @@ fn call_api_cities() {
             fcode: "PPLC".to_string(),
             countrycode: "CN".to_string(),
             wikipedia: "en.wikipedia.org/wiki/Beijing".to_string(),
+        }],
+    };
+
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_contains() {
+    let client = ApiClient::new(GeoNamesApi::Contains, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "2746385");
+    params.insert("maxRows", "1");
+
+    let result: ContainsResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = ContainsResponse {
+        geonames: vec![Geoname {
+            admin_code_1: "07".to_string(),
+            lng: "4.81667".to_string(),
+            geoname_id: 2749011,
+            toponym_name: "Oude Schans".to_string(),
+            country_id: "2750405".to_string(),
+            admin_codes1: AdminCodes1 {
+                iso3166_2: "NH".to_string(),
+            },
+            country_name: "The Netherlands".to_string(),
+            fcode_name: "populated place".to_string(),
+            admin_name1: "North Holland".to_string(),
+            lat: "53.03333".to_string(),
+            fcode: "PPL".to_string(),
+            fcl: "P".to_string(),
+            population: 0,
+            country_code: "NL".to_string(),
+            name: "Oude Schans".to_string(),
+            fcl_name: "city, village,...".to_string(),
         }],
     };
 

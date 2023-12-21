@@ -216,6 +216,14 @@ lazy_static::lazy_static! {
         map.insert("maxRows", vec![]);
         map
     };
+    pub static ref CONTAINS_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("geonameId", vec![]);
+        map.insert("featureClass", vec![]);
+        map.insert("featureCode", vec![]);
+        map.insert("maxRows", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";
