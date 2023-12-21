@@ -1,16 +1,6 @@
-use bytes::Bytes;
-use macros::ApiResponse;
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
-use crate::ApiError;
-
-pub trait ApiResponse: DeserializeOwned + Serialize {
-    fn deserialize_response(bytes: Bytes) -> Result<Self, ApiError>
-    where
-        Self: Sized;
-}
-
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CountryCodeResponse {
     pub languages: String,
@@ -19,7 +9,7 @@ pub struct CountryCodeResponse {
     pub country_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct PostalCodeSearchResponse {
     pub postal_codes: Vec<PostalCode>,
@@ -41,7 +31,7 @@ pub struct PostalCode {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct AstergdemResponse {
     pub lng: f64,
@@ -49,7 +39,7 @@ pub struct AstergdemResponse {
     pub astergdem: i32,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ChildrenResponse {
     pub total_results_count: i32,
@@ -83,7 +73,7 @@ pub struct AdminCodes1 {
     pub iso3166_2: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CitiesResponse {
     pub geonames: Vec<CitiesGeoname>,
@@ -106,13 +96,13 @@ pub struct CitiesGeoname {
     pub wikipedia: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ContainsResponse {
     pub geonames: Vec<Geoname>,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CountryInfoResponse {
     pub geonames: Vec<CountryInfoGeoname>,
@@ -141,7 +131,7 @@ pub struct CountryInfoGeoname {
     pub currency_code: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CountrySubvisionResponse {
     pub codes: Vec<CountrySubvisionCode>,
@@ -161,7 +151,7 @@ pub struct CountrySubvisionCode {
     pub ty: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct EarthquakesResponse {
     pub earthquakes: Vec<Earthquake>,
@@ -179,13 +169,13 @@ pub struct Earthquake {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyResponse {
     pub geonames: Vec<Geoname>,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyPlaceResponse {
     pub geonames: Vec<GeonameNearbyPlace>,
@@ -213,7 +203,7 @@ pub struct GeonameNearbyPlace {
     pub distance: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyPostalCodesResponse {
     pub postal_codes: Vec<PostalCodeFindNearby>,
@@ -236,7 +226,7 @@ pub struct PostalCodeFindNearby {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyStreetsOSMResponse {
     pub street_segment: StreetSegment,
@@ -253,7 +243,7 @@ pub struct StreetSegment {
     pub highway: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyByWeatherResponse {
     pub weather_observation: WeatherObservation,
@@ -282,7 +272,7 @@ pub struct WeatherObservation {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyByWikipediaResponse {
     pub geonames: Vec<WikipediaGeoname>,
@@ -305,7 +295,7 @@ pub struct WikipediaGeoname {
     pub wikipedia_url: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FindNearbyByPoisOsmResponse {
     pub poi: Poi,
@@ -322,7 +312,7 @@ pub struct Poi {
     pub lat: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct AddressResponse {
     pub address: Address,
@@ -348,7 +338,7 @@ pub struct Address {
     pub lat: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct GeoCodeAddressResponse {
     pub address: GeoCodeAddress,
@@ -373,7 +363,7 @@ pub struct GeoCodeAddress {
     pub lat: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct StreetNameLookupResponse {
     pub address: Vec<StreetNameLookupAddress>,
@@ -397,7 +387,7 @@ pub struct StreetNameLookupAddress {
     pub lat: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct GetResponse {
     pub timezone: Timezone,
@@ -459,7 +449,7 @@ pub struct AlternateName {
     pub lang: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Gtopo30Response {
     pub lng: f64,
@@ -467,7 +457,7 @@ pub struct Gtopo30Response {
     pub lat: f64,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct HierarchyResponse {
     pub geonames: Vec<GeonameHierarchy>,
@@ -494,7 +484,7 @@ pub struct GeonameHierarchy {
     pub country_code: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct NeighboursResponse {
     pub total_results_count: i32,
@@ -521,7 +511,7 @@ pub struct NeighboursGeoname {
     pub fcode: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct OceanResponse {
     pub ocean: Ocean,
@@ -535,7 +525,7 @@ pub struct Ocean {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct PostalCodeCountryInfoResponse {
     pub geonames: Vec<PostalCodeCountryInfoGeoname>,

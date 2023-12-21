@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use serde::{de::DeserializeOwned, Serialize};
 use std::collections::HashMap;
 
 use reqwest::{Client, Url};
@@ -11,7 +12,6 @@ use crate::{
         OCEAN_PARAMS, POSTAL_CODE_LOOKUP_PARAMS, POSTAL_CODE_SEARCH_PARAMS, SRTM1_PARAMS,
         SRTM3_PARAMS, TIMEZONE_PARAMS,
     },
-    response::ApiResponse,
     ApiError, ADDRESS_PARAMS, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
     FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_POIS_OSM_PARAMS,
     FIND_NEARBY_STREETS_0SM_PARAMS, GEO_CODE_ADDRESS_PARAMS, HIERARCHY_PARAMS, NEIGHBOURS_PARAMS,
@@ -21,7 +21,7 @@ use crate::{
 #[async_trait]
 pub trait ApiEndpoint {
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>>;
-    async fn call_api<T: ApiResponse>(
+    async fn call_api<T: DeserializeOwned + Serialize>(
         &self,
         params: Option<HashMap<&'static str, &'static str>>,
     ) -> Result<T, ApiError>;
@@ -45,7 +45,7 @@ impl ApiClient {
 
 #[async_trait]
 impl ApiEndpoint for ApiClient {
-    async fn call_api<T: ApiResponse>(
+    async fn call_api<T: DeserializeOwned + Serialize>(
         &self,
         params: Option<HashMap<&'static str, &'static str>>,
     ) -> Result<T, ApiError> {
@@ -118,7 +118,8 @@ impl ApiEndpoint for ApiClient {
 
         eprintln!("HEREEEEEEEEE {:#?}", res);
 
-        let api_res = T::deserialize_response(res)?;
+        let api_res = serde_json::from_slice(&res)
+            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
 
         Ok(api_res)
     }
