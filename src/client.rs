@@ -14,7 +14,8 @@ use crate::{
     response::ApiResponse,
     ApiError, ADDRESS_PARAMS, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
     FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_POIS_OSM_PARAMS,
-    FIND_NEARBY_STREETS_0SM_PARAMS, GEO_CODE_ADDRESS_PARAMS, STREET_NAME_LOOKUP_PARAMS,
+    FIND_NEARBY_STREETS_0SM_PARAMS, GEO_CODE_ADDRESS_PARAMS, HIERARCHY_PARAMS,
+    STREET_NAME_LOOKUP_PARAMS,
 };
 
 #[async_trait]
@@ -145,7 +146,7 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::StreetNameLookup => Some(&STREET_NAME_LOOKUP_PARAMS),
             GeoNamesApi::Get => Some(&GET_PARAMS),
             GeoNamesApi::Gtopo30 => Some(&GTOPO30_PARAMS),
-            GeoNamesApi::Hierarchy => None,
+            GeoNamesApi::Hierarchy => Some(&HIERARCHY_PARAMS),
             GeoNamesApi::Neighbourhood => Some(&NEIGHBOURHOOD_PARAMS),
             GeoNamesApi::Neighbours => None,
             GeoNamesApi::Ocean => Some(&OCEAN_PARAMS),

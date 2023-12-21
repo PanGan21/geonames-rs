@@ -466,3 +466,30 @@ pub struct Gtopo30Response {
     pub gtopo30: f64,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct HierarchyResponse {
+    pub geonames: Vec<GeonameHierarchy>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct GeonameHierarchy {
+    pub lng: String,
+    pub geoname_id: i32,
+    pub name: String,
+    pub fcl_name: String,
+    pub toponym_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+    pub lat: String,
+    pub fcl: String,
+    pub fcode: String,
+    pub population: i64,
+    pub admin_code1: Option<String>,
+    pub admin_codes1: Option<AdminCodes1>,
+    pub country_id: Option<String>,
+    pub country_name: Option<String>,
+    pub country_code: Option<String>,
+}

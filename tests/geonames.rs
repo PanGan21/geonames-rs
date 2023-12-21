@@ -5,10 +5,10 @@ use geonames_rs::{
     CountrySubvisionResponse, Earthquake, EarthquakesResponse, FindNearbyByPoisOsmResponse,
     FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
     FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
-    GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, GetResponse,
-    Gtopo30Response, Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
-    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
-    WikipediaGeoname,
+    GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameHierarchy,
+    GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, Poi, PostalCode,
+    PostalCodeFindNearby, PostalCodeSearchResponse, StreetNameLookupAddress,
+    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -702,6 +702,158 @@ fn call_api_gtopo30() {
         lng: 10.02,
         gtopo30: 2053f64,
         lat: 47.01,
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_hierarchy() {
+    let client = ApiClient::new(GeoNamesApi::Hierarchy, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "2657896");
+
+    let result: HierarchyResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = HierarchyResponse {
+        geonames: vec![
+            GeonameHierarchy {
+                lng: "0".to_string(),
+                geoname_id: 6295630,
+                name: "Earth".to_string(),
+                fcl_name: "parks,area, ...".to_string(),
+                toponym_name: "Earth".to_string(),
+                fcode_name: "area".to_string(),
+                admin_name1: "".to_string(),
+                lat: "0".to_string(),
+                fcl: "L".to_string(),
+                fcode: "AREA".to_string(),
+                population: 6814400000,
+                admin_code1: None,
+                admin_codes1: None,
+                country_id: None,
+                country_name: None,
+                country_code: None,
+            },
+            GeonameHierarchy {
+                lng: "9.14062".to_string(),
+                geoname_id: 6255148,
+                name: "Europe".to_string(),
+                fcl_name: "parks,area, ...".to_string(),
+                toponym_name: "Europe".to_string(),
+                fcode_name: "continent".to_string(),
+                admin_name1: "".to_string(),
+                lat: "48.69096".to_string(),
+                fcl: "L".to_string(),
+                fcode: "CONT".to_string(),
+                population: 741000000,
+                admin_code1: None,
+                admin_codes1: None,
+                country_id: None,
+                country_name: None,
+                country_code: None,
+            },
+            GeonameHierarchy {
+                admin_code1: Some("00".to_string()),
+                lng: "8.01427".to_string(),
+                geoname_id: 2658434,
+                toponym_name: "Switzerland".to_string(),
+                country_id: Some("2658434".to_string()),
+                fcl: "A".to_string(),
+                population: 8516543,
+                country_code: Some("CH".to_string()),
+                name: "Switzerland".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: Some("Switzerland".to_string()),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "47.00016".to_string(),
+                fcode: "PCLI".to_string(),
+                admin_codes1: None,
+            },
+            GeonameHierarchy {
+                admin_code1: Some("ZH".to_string()),
+                lng: "8.66667".to_string(),
+                geoname_id: 2657895,
+                toponym_name: "Kanton Zürich".to_string(),
+                country_id: Some("2658434".to_string()),
+                fcl: "A".to_string(),
+                population: 1553423,
+                country_code: Some("CH".to_string()),
+                name: "Zurich".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                admin_codes1: Some(AdminCodes1 {
+                    iso3166_2: "ZH".to_string(),
+                }),
+                country_name: Some("Switzerland".to_string()),
+                fcode_name: "first-order administrative division".to_string(),
+                admin_name1: "Zurich".to_string(),
+                lat: "47.41667".to_string(),
+                fcode: "ADM1".to_string(),
+            },
+            GeonameHierarchy {
+                admin_code1: Some("ZH".to_string()),
+                lng: "8.54323".to_string(),
+                geoname_id: 6458798,
+                toponym_name: "Bezirk Zürich".to_string(),
+                country_id: Some("2658434".to_string()),
+                fcl: "A".to_string(),
+                population: 421878,
+                country_code: Some("CH".to_string()),
+                name: "Zürich District".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                admin_codes1: Some(AdminCodes1 {
+                    iso3166_2: "ZH".to_string(),
+                }),
+                country_name: Some("Switzerland".to_string()),
+                fcode_name: "second-order administrative division".to_string(),
+                admin_name1: "Zurich".to_string(),
+                lat: "47.3711".to_string(),
+                fcode: "ADM2".to_string(),
+            },
+            GeonameHierarchy {
+                admin_code1: Some("ZH".to_string()),
+                lng: "8.53071".to_string(),
+                geoname_id: 7287650,
+                toponym_name: "Zürich".to_string(),
+                country_id: Some("2658434".to_string()),
+                fcl: "A".to_string(),
+                population: 420217,
+                country_code: Some("CH".to_string()),
+                name: "Zurich".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                admin_codes1: Some(AdminCodes1 {
+                    iso3166_2: "ZH".to_string(),
+                }),
+                country_name: Some("Switzerland".to_string()),
+                fcode_name: "third-order administrative division".to_string(),
+                admin_name1: "Zurich".to_string(),
+                lat: "47.38283".to_string(),
+                fcode: "ADM3".to_string(),
+            },
+            GeonameHierarchy {
+                admin_code1: Some("ZH".to_string()),
+                lng: "8.55".to_string(),
+                geoname_id: 2657896,
+                toponym_name: "Zürich".to_string(),
+                country_id: Some("2658434".to_string()),
+                fcl: "P".to_string(),
+                population: 341730,
+                country_code: Some("CH".to_string()),
+                name: "Zurich".to_string(),
+                fcl_name: "city, village,...".to_string(),
+                admin_codes1: Some(AdminCodes1 {
+                    iso3166_2: "ZH".to_string(),
+                }),
+                country_name: Some("Switzerland".to_string()),
+                fcode_name: "seat of a first-order administrative division".to_string(),
+                admin_name1: "Zurich".to_string(),
+                lat: "47.36667".to_string(),
+                fcode: "PPLA".to_string(),
+            },
+        ],
     };
     assert_eq!(result, expected_result);
 }
