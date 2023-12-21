@@ -304,3 +304,20 @@ pub struct WikipediaGeoname {
     pub lat: f64,
     pub wikipedia_url: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyByPoisOsmResponse {
+    pub poi: Poi,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Poi {
+    pub lng: String,
+    pub distance: String,
+    pub name: String,
+    pub type_class: String,
+    pub type_name: String,
+    pub lat: String,
+}

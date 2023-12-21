@@ -20,9 +20,8 @@ pub enum GeoNamesApi {
     FindNearbyStreetsOsm,
     FindNearByWeather,
     FindNearbyWikipedia,
-    FindNearestAddress,      // only USA
-    FindNearestIntersection, // only USA
     FindNearestIntersectionOsm,
+    #[serde(rename = "findNearbyPOIsOSM")]
     FindNearbyPoisOsm,
     Geocode, // only USA
     Get,
@@ -253,6 +252,14 @@ lazy_static::lazy_static! {
         map.insert("country", vec![]);
         map.insert("postalCode", vec![]);
         map.insert("length", vec![]);
+        map
+    };
+    pub static ref FIND_NEARBY_POIS_OSM_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("lat", vec![]);
+        map.insert("lng", vec![]);
+        map.insert("radius", vec![]);
+        map.insert("maxRows", vec![]);
         map
     };
 }

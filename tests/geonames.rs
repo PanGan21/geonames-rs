@@ -2,10 +2,11 @@ use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
     CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
-    FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi,
-    Geoname, GeonameNearbyPlace, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
-    StreetSegment, WeatherObservation, WikipediaGeoname,
+    FindNearbyByPoisOsmResponse, FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse,
+    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse,
+    FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, Poi, PostalCode,
+    PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment, WeatherObservation,
+    WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -458,6 +459,32 @@ fn call_api_find_nearby_by_wikipedia() {
                 wikipedia_url: "en.wikipedia.org/wiki/Gl%C3%A4rnisch".to_string(),
             }],
         };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby_pois_osm() {
+    let client = ApiClient::new(GeoNamesApi::FindNearbyPoisOsm, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "37.451");
+    params.insert("lng", "-122.18");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyByPoisOsmResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyByPoisOsmResponse {
+        poi: Poi {
+            lng: "-122.18023".to_string(),
+            distance: "0.04".to_string(),
+            name: "".to_string(),
+            type_class: "amenity".to_string(),
+            type_name: "fire_hydrant".to_string(),
+            lat: "37.45131".to_string(),
+        },
+    };
     assert_eq!(result, expected_result);
 }
 

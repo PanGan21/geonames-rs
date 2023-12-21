@@ -13,7 +13,8 @@ use crate::{
     },
     response::ApiResponse,
     ApiError, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
-    FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_STREETS_0SM_PARAMS,
+    FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_POIS_OSM_PARAMS,
+    FIND_NEARBY_STREETS_0SM_PARAMS,
 };
 
 #[async_trait]
@@ -137,10 +138,8 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::FindNearbyStreetsOsm => Some(&FIND_NEARBY_STREETS_0SM_PARAMS),
             GeoNamesApi::FindNearByWeather => Some(&FIND_NEARBY_BY_WEATHER_PARAMS),
             GeoNamesApi::FindNearbyWikipedia => Some(&FIND_NEARBY_BY_WIKIPEDIA_PARAMS),
-            GeoNamesApi::FindNearestAddress => None,
-            GeoNamesApi::FindNearestIntersection => None,
             GeoNamesApi::FindNearestIntersectionOsm => None,
-            GeoNamesApi::FindNearbyPoisOsm => None,
+            GeoNamesApi::FindNearbyPoisOsm => Some(&FIND_NEARBY_POIS_OSM_PARAMS),
             GeoNamesApi::Geocode => None,
             GeoNamesApi::Get => Some(&GET_PARAMS),
             GeoNamesApi::Gtopo30 => Some(&GTOPO30_PARAMS),
