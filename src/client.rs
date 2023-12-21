@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-use bytes::Bytes;
 use std::collections::HashMap;
 
 use reqwest::{Client, Url};
@@ -19,7 +18,6 @@ use crate::{
 #[async_trait]
 pub trait ApiEndpoint {
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>>;
-    fn response_type<T: ApiResponse>(&self, response_bytes: Bytes) -> T;
     async fn call_api<T: ApiResponse>(
         &self,
         params: Option<HashMap<&'static str, &'static str>>,
@@ -108,7 +106,7 @@ impl ApiEndpoint for ApiClient {
             .get(url)
             .send()
             .await
-            .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
+            .map_err(|e| ApiError::GeonamesApi(format!("Geonames api error: {}", e)))?;
 
         let res = response
             .bytes()
@@ -117,14 +115,9 @@ impl ApiEndpoint for ApiClient {
 
         eprintln!("HEREEEEEEEEE {:#?}", res);
 
-        let api_res = self.response_type::<T>(res);
+        let api_res = T::deserialize_response(res)?;
 
         Ok(api_res)
-    }
-
-    fn response_type<T: ApiResponse>(&self, response_bytes: Bytes) -> T {
-        // Return a new instance of the specified response type
-        T::deserialize_response(response_bytes).expect("Failed to create response type")
     }
 
     fn allowed_params(&self) -> Option<&'static HashMap<&'static str, Vec<&'static str>>> {
