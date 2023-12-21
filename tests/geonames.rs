@@ -6,9 +6,10 @@ use geonames_rs::{
     FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse, FindNearbyPlaceResponse,
     FindNearbyPostalCodesResponse, FindNearbyResponse, FindNearbyStreetsOSMResponse,
     GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameHierarchy,
-    GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, Poi, PostalCode,
-    PostalCodeFindNearby, PostalCodeSearchResponse, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
+    GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
+    NeighboursResponse, Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse,
+    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
+    WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -858,6 +859,109 @@ fn call_api_hierarchy() {
     assert_eq!(result, expected_result);
 }
 
+#[test]
+fn call_api_neighbours() {
+    let client = ApiClient::new(GeoNamesApi::Neighbours, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "2658434");
+
+    let result: NeighboursResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_response = NeighboursResponse {
+        total_results_count: 5,
+        geonames: vec![
+            NeighboursGeoname {
+                admin_code1: "00".to_string(),
+                lng: "13.33333".to_string(),
+                geoname_id: 2782113,
+                toponym_name: "Republic of Austria".to_string(),
+                country_id: "2782113".to_string(),
+                fcl: "A".to_string(),
+                population: 8847037,
+                country_code: "AT".to_string(),
+                name: "Austria".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: "Austria".to_string(),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "47.33333".to_string(),
+                fcode: "PCLI".to_string(),
+            },
+            NeighboursGeoname {
+                admin_code1: "00".to_string(),
+                lng: "2".to_string(),
+                geoname_id: 3017382,
+                toponym_name: "Republic of France".to_string(),
+                country_id: "3017382".to_string(),
+                fcl: "A".to_string(),
+                population: 66987244,
+                country_code: "FR".to_string(),
+                name: "France".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: "France".to_string(),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "46".to_string(),
+                fcode: "PCLI".to_string(),
+            },
+            NeighboursGeoname {
+                admin_code1: "00".to_string(),
+                lng: "10.5".to_string(),
+                geoname_id: 2921044,
+                toponym_name: "Federal Republic of Germany".to_string(),
+                country_id: "2921044".to_string(),
+                fcl: "A".to_string(),
+                population: 82927922,
+                country_code: "DE".to_string(),
+                name: "Germany".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: "Germany".to_string(),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "51.5".to_string(),
+                fcode: "PCLI".to_string(),
+            },
+            NeighboursGeoname {
+                admin_code1: "00".to_string(),
+                lng: "12.83333".to_string(),
+                geoname_id: 3175395,
+                toponym_name: "Italian Republic".to_string(),
+                country_id: "3175395".to_string(),
+                fcl: "A".to_string(),
+                population: 60431283,
+                country_code: "IT".to_string(),
+                name: "Italy".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: "Italy".to_string(),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "42.83333".to_string(),
+                fcode: "PCLI".to_string(),
+            },
+            NeighboursGeoname {
+                admin_code1: "00".to_string(),
+                lng: "9.53333".to_string(),
+                geoname_id: 3042058,
+                toponym_name: "Principality of Liechtenstein".to_string(),
+                country_id: "3042058".to_string(),
+                fcl: "A".to_string(),
+                population: 37910,
+                country_code: "LI".to_string(),
+                name: "Liechtenstein".to_string(),
+                fcl_name: "country, state, region,...".to_string(),
+                country_name: "Liechtenstein".to_string(),
+                fcode_name: "independent political entity".to_string(),
+                admin_name1: "".to_string(),
+                lat: "47.16667".to_string(),
+                fcode: "PCLI".to_string(),
+            },
+        ],
+    };
+    assert_eq!(result, expected_response);
+}
 #[test]
 fn call_api_postal_code_search() {
     let client = ApiClient::new(GeoNamesApi::PostalCodeSearch, USERNAME, None);

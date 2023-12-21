@@ -29,7 +29,6 @@ pub enum GeoNamesApi {
     Get,
     Gtopo30,
     Hierarchy,
-    Neighbourhood, // only USA
     Neighbours,
     Ocean,
     PostalCodeCountryInfo,
@@ -149,12 +148,6 @@ lazy_static::lazy_static! {
         map.insert("lat", vec![]);
         map.insert("lng", vec![]);
         map.insert("radius", vec![]);
-        map
-    };
-    pub static ref NEIGHBOURHOOD_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
-        let mut map = HashMap::new();
-        map.insert("lat", vec![]);
-        map.insert("lng", vec![]);
         map
     };
     pub static ref SRTM1_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
@@ -289,6 +282,12 @@ lazy_static::lazy_static! {
     pub static ref HIERARCHY_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
         let mut map = HashMap::new();
         map.insert("geonameId", vec![]);
+        map
+    };
+    pub static ref NEIGHBOURS_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("geonameId", vec![]);
+        map.insert("country", vec![]);
         map
     };
 }

@@ -493,3 +493,30 @@ pub struct GeonameHierarchy {
     pub country_name: Option<String>,
     pub country_code: Option<String>,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct NeighboursResponse {
+    pub total_results_count: i32,
+    pub geonames: Vec<NeighboursGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct NeighboursGeoname {
+    pub admin_code1: String,
+    pub lng: String,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub country_id: String,
+    pub fcl: String,
+    pub population: i64,
+    pub country_code: String,
+    pub name: String,
+    pub fcl_name: String,
+    pub country_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+    pub lat: String,
+    pub fcode: String,
+}
