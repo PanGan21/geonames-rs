@@ -13,7 +13,6 @@ pub enum GeoNamesApi {
     CountryInfo,
     CountrySubdivision,
     Earthquakes,
-    ExtendedFindNearby,
     FindNearby,
     FindNearbyPlaceName,
     FindNearbyPostalCodes,
@@ -114,12 +113,6 @@ lazy_static::lazy_static! {
         map.insert("radius", vec![]);
         map.insert("maxRows", vec![]);
         map.insert("style", vec!["SHORT", "MEDIUM", "LONG", "FULL"]);
-        map
-    };
-    pub static ref EXTENDED_FIND_NEARBY_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
-        let mut map = HashMap::new();
-        map.insert("lat", vec![]);
-        map.insert("lng", vec![]);
         map
     };
     pub static ref COUNTRY_INFO_PARAMS: HashMap<&'static str, Vec<&'static str>> = {

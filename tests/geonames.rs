@@ -1,8 +1,8 @@
 use geonames_rs::{
     AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
     CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
-    CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse, GeoNamesApi,
-    Geoname, PostalCode, PostalCodeSearchResponse,
+    CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
+    FindNearbyResponse, GeoNamesApi, Geoname, PostalCode, PostalCodeSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -249,6 +249,44 @@ fn call_api_earthquakes() {
             eqid: "c0001xgp".to_string(),
             magnitude: 8.8,
             lat: 38.322,
+        }],
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_find_nearby() {
+    let client = ApiClient::new(GeoNamesApi::FindNearby, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "47.3");
+    params.insert("lng", "9");
+    params.insert("maxRows", "1");
+
+    let result: FindNearbyResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = FindNearbyResponse {
+        geonames: vec![Geoname {
+            admin_code_1: "SG".to_string(),
+            lng: "8.99667".to_string(),
+            geoname_id: 11783836,
+            toponym_name: "Habrüti".to_string(),
+            country_id: "2658434".to_string(),
+            admin_codes1: AdminCodes1 {
+                iso3166_2: "SG".to_string(),
+            },
+            country_name: "Switzerland".to_string(),
+            fcode_name: "house(s)".to_string(),
+            admin_name1: "Saint Gallen".to_string(),
+            lat: "47.30437".to_string(),
+            fcode: "HSE".to_string(),
+            fcl: "S".to_string(),
+            population: 0,
+            country_code: "CH".to_string(),
+            name: "Habrüti".to_string(),
+            fcl_name: "spot, building, farm".to_string(),
         }],
     };
     assert_eq!(result, expected_result);

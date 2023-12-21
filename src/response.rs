@@ -178,3 +178,9 @@ pub struct Earthquake {
     pub magnitude: f64,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, ApiResponse)]
+#[serde(rename_all = "camelCase")]
+pub struct FindNearbyResponse {
+    pub geonames: Vec<Geoname>,
+}
