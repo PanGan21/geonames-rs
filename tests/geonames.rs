@@ -1,12 +1,12 @@
 use geonames_rs::{
-    AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse, ChildrenResponse, CitiesGeoname,
-    CitiesResponse, ContainsResponse, CountryCodeResponse, CountryInfoGeoname, CountryInfoResponse,
-    CountrySubvisionCode, CountrySubvisionResponse, Earthquake, EarthquakesResponse,
-    FindNearbyByPoisOsmResponse, FindNearbyByWeatherResponse, FindNearbyByWikipediaResponse,
-    FindNearbyPlaceResponse, FindNearbyPostalCodesResponse, FindNearbyResponse,
-    FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace, Poi, PostalCode,
-    PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment, WeatherObservation,
-    WikipediaGeoname,
+    Address, AddressResponse, AdminCodes1, ApiClient, ApiEndpoint, AstergdemResponse,
+    ChildrenResponse, CitiesGeoname, CitiesResponse, ContainsResponse, CountryCodeResponse,
+    CountryInfoGeoname, CountryInfoResponse, CountrySubvisionCode, CountrySubvisionResponse,
+    Earthquake, EarthquakesResponse, FindNearbyByPoisOsmResponse, FindNearbyByWeatherResponse,
+    FindNearbyByWikipediaResponse, FindNearbyPlaceResponse, FindNearbyPostalCodesResponse,
+    FindNearbyResponse, FindNearbyStreetsOSMResponse, GeoNamesApi, Geoname, GeonameNearbyPlace,
+    Poi, PostalCode, PostalCodeFindNearby, PostalCodeSearchResponse, StreetSegment,
+    WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -483,6 +483,40 @@ fn call_api_find_nearby_pois_osm() {
             type_class: "amenity".to_string(),
             type_name: "fire_hydrant".to_string(),
             lat: "37.45131".to_string(),
+        },
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_address() {
+    let client = ApiClient::new(GeoNamesApi::Address, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "52.358");
+    params.insert("lng", "4.881");
+
+    let result: AddressResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = AddressResponse {
+        address: Address {
+            admin_code2: "0363".to_string(),
+            source_id: "0363200012086034".to_string(),
+            admin_code3: "".to_string(),
+            admin_code1: "07".to_string(),
+            lng: "4.88132".to_string(),
+            distance: "0.02".to_string(),
+            house_number: "7".to_string(),
+            locality: "Amsterdam".to_string(),
+            admin_code4: "".to_string(),
+            admin_name2: "Gemeente Amsterdam".to_string(),
+            street: "Paulus Potterstraat".to_string(),
+            postalcode: "1071 CX".to_string(),
+            country_code: "NL".to_string(),
+            admin_name1: "North Holland".to_string(),
+            lat: "52.35792".to_string(),
         },
     };
     assert_eq!(result, expected_result);

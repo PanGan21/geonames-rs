@@ -12,7 +12,7 @@ use crate::{
         SRTM1_PARAMS, SRTM3_PARAMS, TIMEZONE_PARAMS,
     },
     response::ApiResponse,
-    ApiError, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
+    ApiError, ADDRESS_PARAMS, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
     FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_POIS_OSM_PARAMS,
     FIND_NEARBY_STREETS_0SM_PARAMS,
 };
@@ -140,7 +140,7 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::FindNearbyWikipedia => Some(&FIND_NEARBY_BY_WIKIPEDIA_PARAMS),
             GeoNamesApi::FindNearestIntersectionOsm => None,
             GeoNamesApi::FindNearbyPoisOsm => Some(&FIND_NEARBY_POIS_OSM_PARAMS),
-            GeoNamesApi::Geocode => None,
+            GeoNamesApi::Address => Some(&ADDRESS_PARAMS),
             GeoNamesApi::Get => Some(&GET_PARAMS),
             GeoNamesApi::Gtopo30 => Some(&GTOPO30_PARAMS),
             GeoNamesApi::Hierarchy => None,
@@ -160,7 +160,6 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::WeatherIcao => None,
             GeoNamesApi::WikipediaBoundingBox => None,
             GeoNamesApi::WikipediaSearch => None,
-            GeoNamesApi::Address => None,
             GeoNamesApi::GeoCodeAddress => None,
             GeoNamesApi::StreetNameLookup => None,
         }
