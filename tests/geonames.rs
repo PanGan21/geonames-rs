@@ -11,8 +11,8 @@ use geonames_rs::{
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
     PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
     SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, WeatherObservation,
-    WikipediaGeoname,
+    StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, Weather,
+    WeatherObservation, WeatherResponse, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1218,4 +1218,47 @@ fn call_api_timezone() {
     };
     // Most fields are dynamic
     assert_eq!(result.country_name, expected_result.country_name);
+}
+
+#[test]
+fn call_api_weather() {
+    let client = ApiClient::new(GeoNamesApi::Weather, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("north", "44.1");
+    params.insert("south", "-9.9");
+    params.insert("east", "-22.4");
+    params.insert("west", "55.2");
+    params.insert("maxRows", "1");
+
+    let result: WeatherResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = WeatherResponse {
+        weather_observations: vec![Weather {
+            lng: -100.01666666666668,
+            observation: "KFTN 221040Z AUTO 13004KT 10SM CLR 17/16 A3015 RMK A01".to_string(),
+            icao: "KFTN".to_string(),
+            clouds: "n/a".to_string(),
+            dew_point: "16".to_string(),
+            datetime: "2023-12-22 10:40:00".to_string(),
+            temperature: "17".to_string(),
+            humidity: 93,
+            station_name: "DIMMIT".to_string(),
+            weather_condition: "n/a".to_string(),
+            wind_direction: 130,
+            wind_speed: "04".to_string(),
+            lat: 28.216666666666665,
+        }],
+    };
+    // Most fields are dynamic
+    assert_eq!(
+        result.weather_observations[0].lng,
+        expected_result.weather_observations[0].lng
+    );
+    assert_eq!(
+        result.weather_observations[0].lat,
+        expected_result.weather_observations[0].lat
+    );
 }

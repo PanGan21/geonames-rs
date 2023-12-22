@@ -628,3 +628,28 @@ pub struct TimezoneResponse {
     pub time: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WeatherResponse {
+    pub weather_observations: Vec<Weather>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Weather {
+    pub lng: f64,
+    pub observation: String,
+    #[serde(rename = "ICAO")]
+    pub icao: String,
+    pub clouds: String,
+    pub dew_point: String,
+    pub datetime: String,
+    pub temperature: String,
+    pub humidity: i32,
+    pub station_name: String,
+    pub weather_condition: String,
+    pub wind_direction: i32,
+    pub wind_speed: String,
+    pub lat: f64,
+}
