@@ -596,3 +596,11 @@ pub struct SiblingGeoname {
     pub lat: String,
     pub fcode: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Srtm1Response {
+    pub srtm1: i32,
+    pub lat: f64,
+    pub lng: f64,
+}
