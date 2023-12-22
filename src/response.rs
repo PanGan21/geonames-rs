@@ -540,3 +540,25 @@ pub struct PostalCodeCountryInfoGeoname {
     pub min_postal_code: String,
     pub country_name: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct PostalCodeLookupResponse {
+    pub postalcodes: Vec<PostalCodeLookup>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct PostalCodeLookup {
+    pub admin_code2: String,
+    pub admin_code3: String,
+    pub admin_name3: String,
+    pub admin_code1: String,
+    pub admin_name2: String,
+    pub lng: f64,
+    pub country_code: String,
+    pub postalcode: String,
+    pub admin_name1: String,
+    pub place_name: String,
+    pub lat: f64,
+}

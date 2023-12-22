@@ -8,9 +8,9 @@ use geonames_rs::{
     GeoCodeAddress, GeoCodeAddressResponse, GeoNamesApi, Geoname, GeonameHierarchy,
     GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
     NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeCountryInfoGeoname,
-    PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeSearchResponse,
-    StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation,
-    WikipediaGeoname,
+    PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
+    PostalCodeLookupResponse, PostalCodeSearchResponse, StreetNameLookupAddress,
+    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1009,6 +1009,37 @@ fn call_api_postal_code_country_info() {
     };
 
     assert_eq!(result.geonames[0], expected_result.geonames[0]);
+}
+
+#[test]
+fn call_api_postal_code_lookup() {
+    let client = ApiClient::new(GeoNamesApi::PostalCodeLookup, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("postalcode", "6600");
+    params.insert("country", "AT");
+    params.insert("maxRows", "1");
+
+    let result: PostalCodeLookupResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = PostalCodeLookupResponse {
+        postalcodes: vec![PostalCodeLookup {
+            admin_code2: "708".to_string(),
+            admin_code3: "70820".to_string(),
+            admin_name3: "Lechaschau".to_string(),
+            admin_code1: "07".to_string(),
+            admin_name2: "Politischer Bezirk Reutte".to_string(),
+            lng: 10.706520080566406,
+            country_code: "AT".to_string(),
+            postalcode: "6600".to_string(),
+            admin_name1: "Tirol".to_string(),
+            place_name: "Lechaschau".to_string(),
+            lat: 47.488035007826824,
+        }],
+    };
+    assert_eq!(result, expected_result);
 }
 
 #[test]
