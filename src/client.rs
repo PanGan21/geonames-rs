@@ -104,7 +104,7 @@ impl ApiEndpoint for ApiClient {
         }
 
         url.query_pairs_mut().append_pair("username", self.username);
-        eprintln!("URL {}", url.clone());
+
         let client = Client::new();
         let response = client
             .get(url)
@@ -116,8 +116,6 @@ impl ApiEndpoint for ApiClient {
             .bytes()
             .await
             .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
-
-        eprintln!("HEREEEEEEEEE {:#?}", res);
 
         let api_res = serde_json::from_slice(&res)
             .map_err(|e| ApiError::Deserialization(format!("Deserialization error: {}", e)))?;
