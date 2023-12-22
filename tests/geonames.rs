@@ -9,8 +9,9 @@ use geonames_rs::{
     GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
     NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeCountryInfoGeoname,
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
-    PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
+    PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
+    SiblingsResponse, StreetNameLookupAddress, StreetNameLookupResponse, StreetSegment, Timezone,
+    WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1108,4 +1109,43 @@ fn call_api_search() {
     };
 
     assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_siblings() {
+    let client = ApiClient::new(GeoNamesApi::Siblings, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("geonameId", "3017382");
+
+    let result: SiblingsResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = SiblingsResponse {
+        total_results_count: 49,
+        geonames: vec![SiblingGeoname {
+            admin_code1: "00".to_string(),
+            lng: "20".to_string(),
+            geoname_id: 783754,
+            toponym_name: "Republic of Albania".to_string(),
+            country_id: "783754".to_string(),
+            fcl: "A".to_string(),
+            population: 2866376,
+            country_code: "AL".to_string(),
+            name: "Albania".to_string(),
+            fcl_name: "country, state, region,...".to_string(),
+            country_name: "Albania".to_string(),
+            fcode_name: "independent political entity".to_string(),
+            admin_name1: "".to_string(),
+            lat: "41".to_string(),
+            fcode: "PCLI".to_string(),
+        }],
+    };
+
+    assert_eq!(
+        result.total_results_count,
+        expected_result.total_results_count
+    );
+    assert_eq!(result.geonames[0], expected_result.geonames[0]);
 }

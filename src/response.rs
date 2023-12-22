@@ -569,3 +569,30 @@ pub struct SearchResponse {
     pub total_results_count: i32,
     pub geonames: Vec<Geoname>,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct SiblingsResponse {
+    pub total_results_count: i32,
+    pub geonames: Vec<SiblingGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct SiblingGeoname {
+    pub admin_code1: String,
+    pub lng: String,
+    pub geoname_id: i32,
+    pub toponym_name: String,
+    pub country_id: String,
+    pub fcl: String,
+    pub population: i32,
+    pub country_code: String,
+    pub name: String,
+    pub fcl_name: String,
+    pub country_name: String,
+    pub fcode_name: String,
+    pub admin_name1: String,
+    pub lat: String,
+    pub fcode: String,
+}
