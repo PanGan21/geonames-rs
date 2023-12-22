@@ -11,7 +11,8 @@ use geonames_rs::{
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
     PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
     SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
+    StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, WeatherObservation,
+    WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1188,4 +1189,33 @@ fn call_api_srtm3() {
         lng: 10.2,
     };
     assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_timezone() {
+    let client = ApiClient::new(GeoNamesApi::Timezone, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "50.01");
+    params.insert("lng", "10.2");
+
+    let result: TimezoneResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = TimezoneResponse {
+        sunrise: "2023-12-22 08:15".to_string(),
+        lng: 10.2,
+        country_code: "DE".to_string(),
+        gmt_offset: 1,
+        raw_offset: 1,
+        sunset: "2023-12-22 16:19".to_string(),
+        timezone_id: "Europe/Berlin".to_string(),
+        dst_offset: 2,
+        country_name: "Germany".to_string(),
+        time: "2023-12-22 11:09".to_string(),
+        lat: 50.01,
+    };
+    // Most fields are dynamic
+    assert_eq!(result.country_name, expected_result.country_name);
 }

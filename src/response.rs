@@ -612,3 +612,19 @@ pub struct Srtm3Response {
     pub lat: f64,
     pub lng: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct TimezoneResponse {
+    pub sunrise: String,
+    pub lng: f64,
+    pub country_code: String,
+    pub gmt_offset: i32,
+    pub raw_offset: i32,
+    pub sunset: String,
+    pub timezone_id: String,
+    pub dst_offset: i32,
+    pub country_name: String,
+    pub time: String,
+    pub lat: f64,
+}
