@@ -11,8 +11,8 @@ use geonames_rs::{
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
     PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
     SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
-    StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, Weather,
-    WeatherObservation, WeatherResponse, WikipediaGeoname,
+    StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, Weather, WeatherIcao,
+    WeatherIcaoResponse, WeatherObservation, WeatherResponse, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1260,5 +1260,50 @@ fn call_api_weather() {
     assert_eq!(
         result.weather_observations[0].lat,
         expected_result.weather_observations[0].lat
+    );
+}
+
+#[test]
+fn call_api_weather_icao() {
+    let client = ApiClient::new(GeoNamesApi::WeatherIcao, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("ICAO", "LSZH");
+
+    let result: WeatherIcaoResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = WeatherIcaoResponse {
+        weather_observation: WeatherIcao {
+            elevation: 432,
+            lng: 8.533333333333333,
+            observation:
+                "LSZH 221120Z 25010KT 8000 RA FEW015 BKN024 BKN027 07/05 Q1012 TEMPO 4500 TEMPO NSW"
+                    .to_string(),
+            icao: "LSZH".to_string(),
+            clouds: "few clouds".to_string(),
+            dew_point: "5".to_string(),
+            clouds_code: "FEW".to_string(),
+            datetime: "2023-12-22 11:20:00".to_string(),
+            country_code: "CH".to_string(),
+            temperature: "7".to_string(),
+            humidity: 87f64,
+            station_name: "Zurich-Kloten".to_string(),
+            weather_condition: "n/a".to_string(),
+            wind_direction: 250,
+            hecto_pasc_altimeter: 1012,
+            wind_speed: "10".to_string(),
+            lat: 47.483333333333334,
+        },
+    };
+    // Most fields are dynamic
+    assert_eq!(
+        result.weather_observation.lng,
+        expected_result.weather_observation.lng
+    );
+    assert_eq!(
+        result.weather_observation.lat,
+        expected_result.weather_observation.lat
     );
 }

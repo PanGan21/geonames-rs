@@ -653,3 +653,32 @@ pub struct Weather {
     pub wind_speed: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WeatherIcaoResponse {
+    pub weather_observation: WeatherIcao,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WeatherIcao {
+    pub elevation: i32,
+    pub lng: f64,
+    pub observation: String,
+    #[serde(rename = "ICAO")]
+    pub icao: String,
+    pub clouds: String,
+    pub dew_point: String,
+    pub clouds_code: String,
+    pub datetime: String,
+    pub country_code: String,
+    pub temperature: String,
+    pub humidity: f64,
+    pub station_name: String,
+    pub weather_condition: String,
+    pub wind_direction: i32,
+    pub hecto_pasc_altimeter: i32,
+    pub wind_speed: String,
+    pub lat: f64,
+}

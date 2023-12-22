@@ -339,6 +339,11 @@ lazy_static::lazy_static! {
         map.insert("maxRows", vec![]);
         map
     };
+    pub static ref WEATHER_ICAO_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("ICAO", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";

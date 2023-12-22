@@ -15,7 +15,7 @@ use crate::{
     ApiError, ADDRESS_PARAMS, CHILDREN_PARAMS, CITIES_PARAMS, CONTAINS_PARAMS, EARTHQUAKES_PARAMS,
     FIND_NEARBY_BY_WEATHER_PARAMS, FIND_NEARBY_BY_WIKIPEDIA_PARAMS, FIND_NEARBY_POIS_OSM_PARAMS,
     FIND_NEARBY_STREETS_0SM_PARAMS, GEO_CODE_ADDRESS_PARAMS, HIERARCHY_PARAMS, NEIGHBOURS_PARAMS,
-    SEARCH_PARAMS, SIBLINGS_PARAMS, STREET_NAME_LOOKUP_PARAMS, WEATHER_PARAMS,
+    SEARCH_PARAMS, SIBLINGS_PARAMS, STREET_NAME_LOOKUP_PARAMS, WEATHER_ICAO_PARAMS, WEATHER_PARAMS,
 };
 
 #[async_trait]
@@ -159,7 +159,7 @@ impl ApiEndpoint for ApiClient {
             GeoNamesApi::Srtm3 => Some(&SRTM3_PARAMS),
             GeoNamesApi::Timezone => Some(&TIMEZONE_PARAMS),
             GeoNamesApi::Weather => Some(&WEATHER_PARAMS),
-            GeoNamesApi::WeatherIcao => None,
+            GeoNamesApi::WeatherIcao => Some(&WEATHER_ICAO_PARAMS),
             GeoNamesApi::WikipediaBoundingBox => None,
             GeoNamesApi::WikipediaSearch => None,
         }
