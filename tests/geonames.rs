@@ -13,7 +13,8 @@ use geonames_rs::{
     SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
     StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, Weather, WeatherIcao,
     WeatherIcaoResponse, WeatherObservation, WeatherResponse, WikipediaBoundingBoxGeoname,
-    WikipediaBoundingBoxResponse, WikipediaGeoname,
+    WikipediaBoundingBoxResponse, WikipediaGeoname, WikipediaSearchGeoname,
+    WikipediaSearchResponse,
 };
 use std::collections::HashMap;
 
@@ -1327,19 +1328,51 @@ fn call_api_wikipedia_bounding_box() {
     let expected_result = WikipediaBoundingBoxResponse {
             geonames: vec![
                 WikipediaBoundingBoxGeoname {
-                summary: "Indonesia (; Indonesian:), officially the Republic of Indonesia , is a country in Southeast Asia, between the Indian and Pacific oceans. It is the world's largest island country, with more than thirteen thousand islands, and at , the 14th largest by land area and the 7th largest in combined sea and (...)".to_string(),
-                elevation: -4,
-                feature: "country".to_string(),
-                lng: 106.828611,
-                country_code: "ID".to_string(),
-                rank: 100,
-                thumbnail_img: "https://www.geonames.org/img/wikipedia/143000/thumb-142078-100.jpg".to_string(),
-                lang: "en".to_string(),
-                title: "Indonesia".to_string(),
-                lat: -6.175,
-                wikipedia_url: "en.wikipedia.org/wiki/Indonesia".to_string(),
+                    summary: "Indonesia (; Indonesian:), officially the Republic of Indonesia , is a country in Southeast Asia, between the Indian and Pacific oceans. It is the world's largest island country, with more than thirteen thousand islands, and at , the 14th largest by land area and the 7th largest in combined sea and (...)".to_string(),
+                    elevation: -4,
+                    feature: "country".to_string(),
+                    lng: 106.828611,
+                    country_code: "ID".to_string(),
+                    rank: 100,
+                    thumbnail_img: "https://www.geonames.org/img/wikipedia/143000/thumb-142078-100.jpg".to_string(),
+                    lang: "en".to_string(),
+                    title: "Indonesia".to_string(),
+                    lat: -6.175,
+                    wikipedia_url: "en.wikipedia.org/wiki/Indonesia".to_string(),
             }
         ],
+    };
+
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_wikipedia_search() {
+    let client = ApiClient::new(GeoNamesApi::WikipediaSearch, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("q", "london");
+    params.insert("maxRows", "1");
+
+    let result: WikipediaSearchResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = WikipediaSearchResponse {
+        geonames: vec![WikipediaSearchGeoname {
+            summary: "London is the capital and most populous city of England and the United Kingdom. Standing on the River Thames, London has been a major settlement for two millennia, its history going back to its founding by the Romans, who named it Londinium (...)".to_string(),
+            elevation: 8,
+            geo_name_id: 2643743,
+            feature: "city".to_string(),
+            lng: -0.11832,
+            country_code: "GB".to_string(),
+            rank: 100,
+            thumbnail_img: "https://www.geonames.org/img/wikipedia/43000/thumb-42715-100.jpg".to_string(),
+            lang: "en".to_string(),
+            title: "London".to_string(),
+            lat: 51.50939,
+            wikipedia_url: "en.wikipedia.org/wiki/London".to_string(),
+        }],
     };
 
     assert_eq!(result, expected_result);

@@ -704,3 +704,26 @@ pub struct WikipediaBoundingBoxGeoname {
     pub lat: f64,
     pub wikipedia_url: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WikipediaSearchResponse {
+    pub geonames: Vec<WikipediaSearchGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WikipediaSearchGeoname {
+    pub summary: String,
+    pub elevation: i32,
+    pub geo_name_id: i32,
+    pub feature: String,
+    pub lng: f64,
+    pub country_code: String,
+    pub rank: i32,
+    pub thumbnail_img: String,
+    pub lang: String,
+    pub title: String,
+    pub lat: f64,
+    pub wikipedia_url: String,
+}
