@@ -9,7 +9,7 @@ use geonames_rs::{
     GeonameNearbyPlace, GetResponse, Gtopo30Response, HierarchyResponse, NeighboursGeoname,
     NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeCountryInfoGeoname,
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
-    PostalCodeLookupResponse, PostalCodeSearchResponse, StreetNameLookupAddress,
+    PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, StreetNameLookupAddress,
     StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
@@ -1065,6 +1065,45 @@ fn call_api_postal_code_search() {
             iso: "NH".to_string(),
             place_name: "Amsterdam".to_string(),
             lat: 52.40451488171361,
+        }],
+    };
+
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_search() {
+    let client = ApiClient::new(GeoNamesApi::Search, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("q", "london");
+    params.insert("maxRows", "1");
+
+    let result: SearchResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = SearchResponse {
+        total_results_count: 10625,
+        geonames: vec![Geoname {
+            admin_code_1: "ENG".to_string(),
+            lng: "-0.12574".to_string(),
+            geoname_id: 2643743,
+            toponym_name: "London".to_string(),
+            country_id: "2635167".to_string(),
+            admin_codes1: AdminCodes1 {
+                iso3166_2: "ENG".to_string(),
+            },
+            country_name: "United Kingdom".to_string(),
+            fcode_name: "capital of a political entity".to_string(),
+            admin_name1: "England".to_string(),
+            lat: "51.50853".to_string(),
+            fcode: "PPLC".to_string(),
+            fcl: "P".to_string(),
+            population: 8961989,
+            country_code: "GB".to_string(),
+            name: "London".to_string(),
+            fcl_name: "city, village,...".to_string(),
         }],
     };
 

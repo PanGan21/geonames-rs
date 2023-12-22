@@ -562,3 +562,10 @@ pub struct PostalCodeLookup {
     pub place_name: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct SearchResponse {
+    pub total_results_count: i32,
+    pub geonames: Vec<Geoname>,
+}

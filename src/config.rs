@@ -34,7 +34,6 @@ pub enum GeoNamesApi {
     PostalCodeCountryInfo,
     PostalCodeLookup,
     PostalCodeSearch,
-    RssToGeo,
     Search,
     Siblings,
     Srtm1,
@@ -288,6 +287,42 @@ lazy_static::lazy_static! {
         let mut map = HashMap::new();
         map.insert("geonameId", vec![]);
         map.insert("country", vec![]);
+        map
+    };
+    pub static ref SEARCH_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("q", vec![]);
+        map.insert("name", vec![]);
+        map.insert("name_equals", vec![]);
+        map.insert("name_startsWith", vec![]);
+        map.insert("maxRows", vec![]);
+        map.insert("startRow", vec![]);
+        map.insert("country", vec![]);
+        map.insert("countryBias", vec![]);
+        map.insert("continentCode", vec![]);
+        map.insert("adminCode1", vec![]);
+        map.insert("adminCode2", vec![]);
+        map.insert("adminCode3", vec![]);
+        map.insert("adminCode4", vec![]);
+        map.insert("adminCode5", vec![]);
+        map.insert("featureClass", vec![]);
+        map.insert("featureCode", vec![]);
+        map.insert("cities", vec![]);
+        map.insert("lang", vec![]);
+        map.insert("type", vec![]);
+        map.insert("style", vec![]);
+        map.insert("isNameRequired", vec![]);
+        map.insert("tag", vec![]);
+        map.insert("operator", vec![]);
+        map.insert("charset", vec![]);
+        map.insert("fuzzy", vec![]);
+        map.insert("north", vec![]);
+        map.insert("south", vec![]);
+        map.insert("east", vec![]);
+        map.insert("west", vec![]);
+        map.insert("searchlang", vec![]);
+        map.insert("orderby", vec![]);
+        map.insert("inclBbox", vec![]);
         map
     };
 }
