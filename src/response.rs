@@ -604,3 +604,11 @@ pub struct Srtm1Response {
     pub lat: f64,
     pub lng: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct Srtm3Response {
+    pub srtm3: i32,
+    pub lat: f64,
+    pub lng: f64,
+}

@@ -10,8 +10,8 @@ use geonames_rs::{
     NeighboursResponse, Ocean, OceanResponse, Poi, PostalCode, PostalCodeCountryInfoGeoname,
     PostalCodeCountryInfoResponse, PostalCodeFindNearby, PostalCodeLookup,
     PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
-    SiblingsResponse, Srtm1Response, StreetNameLookupAddress, StreetNameLookupResponse,
-    StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
+    SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
+    StreetNameLookupResponse, StreetSegment, Timezone, WeatherObservation, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1164,6 +1164,26 @@ fn call_api_srtm1() {
 
     let expected_result = Srtm1Response {
         srtm1: 208,
+        lat: 50.01,
+        lng: 10.2,
+    };
+    assert_eq!(result, expected_result);
+}
+
+#[test]
+fn call_api_srtm3() {
+    let client = ApiClient::new(GeoNamesApi::Srtm3, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("lat", "50.01");
+    params.insert("lng", "10.2");
+
+    let result: Srtm3Response = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = Srtm3Response {
+        srtm3: 206,
         lat: 50.01,
         lng: 10.2,
     };
