@@ -12,7 +12,8 @@ use geonames_rs::{
     PostalCodeLookupResponse, PostalCodeSearchResponse, SearchResponse, SiblingGeoname,
     SiblingsResponse, Srtm1Response, Srtm3Response, StreetNameLookupAddress,
     StreetNameLookupResponse, StreetSegment, Timezone, TimezoneResponse, Weather, WeatherIcao,
-    WeatherIcaoResponse, WeatherObservation, WeatherResponse, WikipediaGeoname,
+    WeatherIcaoResponse, WeatherObservation, WeatherResponse, WikipediaBoundingBoxGeoname,
+    WikipediaBoundingBoxResponse, WikipediaGeoname,
 };
 use std::collections::HashMap;
 
@@ -1306,4 +1307,40 @@ fn call_api_weather_icao() {
         result.weather_observation.lat,
         expected_result.weather_observation.lat
     );
+}
+
+#[test]
+fn call_api_wikipedia_bounding_box() {
+    let client = ApiClient::new(GeoNamesApi::WikipediaBoundingBox, USERNAME, None);
+    let mut params = HashMap::new();
+    params.insert("north", "44.1");
+    params.insert("south", "-9.9");
+    params.insert("east", "-22.4");
+    params.insert("west", "55.2");
+    params.insert("maxRows", "1");
+
+    let result: WikipediaBoundingBoxResponse = tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(client.call_api(Some(params)))
+        .unwrap();
+
+    let expected_result = WikipediaBoundingBoxResponse {
+            geonames: vec![
+                WikipediaBoundingBoxGeoname {
+                summary: "Indonesia (; Indonesian:), officially the Republic of Indonesia , is a country in Southeast Asia, between the Indian and Pacific oceans. It is the world's largest island country, with more than thirteen thousand islands, and at , the 14th largest by land area and the 7th largest in combined sea and (...)".to_string(),
+                elevation: -4,
+                feature: "country".to_string(),
+                lng: 106.828611,
+                country_code: "ID".to_string(),
+                rank: 100,
+                thumbnail_img: "https://www.geonames.org/img/wikipedia/143000/thumb-142078-100.jpg".to_string(),
+                lang: "en".to_string(),
+                title: "Indonesia".to_string(),
+                lat: -6.175,
+                wikipedia_url: "en.wikipedia.org/wiki/Indonesia".to_string(),
+            }
+        ],
+    };
+
+    assert_eq!(result, expected_result);
 }

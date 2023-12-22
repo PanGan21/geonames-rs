@@ -344,6 +344,16 @@ lazy_static::lazy_static! {
         map.insert("ICAO", vec![]);
         map
     };
+    pub static ref WIKIPEDIA_BOUNDING_BOX_PARAMS: HashMap<&'static str, Vec<&'static str>> = {
+        let mut map = HashMap::new();
+        map.insert("north", vec![]);
+        map.insert("south", vec![]);
+        map.insert("east", vec![]);
+        map.insert("west", vec![]);
+        map.insert("lang", vec![]);
+        map.insert("maxRows", vec![]);
+        map
+    };
 }
 
 pub const BASE_URI: &str = "https://secure.geonames.org/";

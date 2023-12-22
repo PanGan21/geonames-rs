@@ -682,3 +682,25 @@ pub struct WeatherIcao {
     pub wind_speed: String,
     pub lat: f64,
 }
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WikipediaBoundingBoxResponse {
+    pub geonames: Vec<WikipediaBoundingBoxGeoname>,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct WikipediaBoundingBoxGeoname {
+    pub summary: String,
+    pub elevation: i32,
+    pub feature: String,
+    pub lng: f64,
+    pub country_code: String,
+    pub rank: i32,
+    pub thumbnail_img: String,
+    pub lang: String,
+    pub title: String,
+    pub lat: f64,
+    pub wikipedia_url: String,
+}
