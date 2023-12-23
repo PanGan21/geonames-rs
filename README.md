@@ -2,49 +2,6 @@
 
 Rust client library for [geonames.org](https://www.geonames.org/) API.
 
-## Features
-
-An overview of the overall Web Services exposed from [geonames.org](https://www.geonames.org/) can be found here.
-</br>
-The library supports the following web services in JSON format:
-
-- astergdem
-- children
-- cities
-- contains
-- countryCode
-- countryInfo
-- countrySubdivision
-- earthquakes
-- findNearby
-- findNearbyPlaceName
-- findNearbyPostalCodes
-- findNearbyStreetsOSM
-- findNearByWeather
-- findNearbyWikipedia
-- findNearestIntersectionOsm
-- findNearbyPOIsOSM
-- address
-- geoCodeAddress
-- streetNameLookup
-- get
-- gtopo30
-- hierarchy
-- neighbours
-- ocean
-- postalCodeCountryInfo
-- postalCodeLookup
-- postalCodeSearch
-- search
-- siblings
-- srtm1
-- srtm3
-- timezone
-- weather
-- weatherIcao
-- wikipediaBoundingBox
-- wikipediaSearch
-
 ## Usage
 
 ```rust
@@ -91,6 +48,49 @@ let client = ApiClient::new(api, username, token);
 ```
 API_USER=your_username cargo test
 ```
+
+## Features
+
+An overview of the overall Web Services exposed from [geonames.org](https://www.geonames.org/) can be found here.
+</br>
+The library supports the following web services in JSON format:
+
+- astergdem
+- children
+- cities
+- contains
+- countryCode
+- countryInfo
+- countrySubdivision
+- earthquakes
+- findNearby
+- findNearbyPlaceName
+- findNearbyPostalCodes
+- findNearbyStreetsOSM
+- findNearByWeather
+- findNearbyWikipedia
+- findNearestIntersectionOsm
+- findNearbyPOIsOSM
+- address
+- geoCodeAddress
+- streetNameLookup
+- get
+- gtopo30
+- hierarchy
+- neighbours
+- ocean
+- postalCodeCountryInfo
+- postalCodeLookup
+- postalCodeSearch
+- search
+- siblings
+- srtm1
+- srtm3
+- timezone
+- weather
+- weatherIcao
+- wikipediaBoundingBox
+- wikipediaSearch
 
 ## License
 
